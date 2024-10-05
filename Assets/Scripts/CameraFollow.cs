@@ -48,10 +48,6 @@ namespace Germinator
         private float rotationFactor = 1f;
 
         [SerializeField]
-        [Tooltip("Rotation speed for reaching the desired angle.")]
-        private float rotationSmoothSpeed = 0.1f;
-
-        [SerializeField]
         [Tooltip("Speed at which the camera oscillates between angles.")]
         private float oscillationSpeed = 3f;
         #endregion
@@ -59,15 +55,12 @@ namespace Germinator
         private Camera cam;
 
         private Vector3 velocity = Vector3.zero;
-        private Vector3 offset;
         private float currentRotationTime = 0f;
         private float currentZoomTime = 0f;
-        private float targetZoom;
 
         void Start()
         {
             cam = GetComponent<Camera>();
-            targetZoom = baseDistance;
         }
 
         void LateUpdate()
@@ -80,7 +73,7 @@ namespace Germinator
 
         private void FollowPlayer()
         {
-            Vector3 desiredPosition = player.position + offset;
+            Vector3 desiredPosition = player.position;
             Vector3 smoothedPosition = Vector3.SmoothDamp(
                 transform.position,
                 desiredPosition,
@@ -94,7 +87,7 @@ namespace Germinator
         {
             if (!cam || !isZooming)
             {
-                if (cam.orthographicSize != baseDistance)
+                if (!Mathf.Approximately(cam.orthographicSize, baseDistance))
                 {
                     cam.orthographicSize = baseDistance;
                 }
@@ -104,7 +97,7 @@ namespace Germinator
             currentZoomTime += Time.deltaTime * zoomOscillationSpeed;
 
             float t = (Mathf.Sin(currentZoomTime) + 1f) / 2f;
-            targetZoom = Mathf.Lerp(baseDistance, baseDistance - zoomFactor, t);
+            float targetZoom = Mathf.Lerp(baseDistance, baseDistance - zoomFactor, t);
 
             float smoothZoom = Mathf.Lerp(cam.orthographicSize, targetZoom, zoomSmoothSpeed);
             cam.orthographicSize = smoothZoom;
@@ -121,7 +114,6 @@ namespace Germinator
                 }
                 return;
             }
-
 
             currentRotationTime += Time.deltaTime * oscillationSpeed;
             float t = (Mathf.Sin(currentRotationTime) + 1f) / 2f;

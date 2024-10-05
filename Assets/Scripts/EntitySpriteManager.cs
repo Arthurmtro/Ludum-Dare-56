@@ -7,8 +7,6 @@ namespace Germinator
     {
         Eyes,
         Body,
-        RightArm,
-        LeftArm,
         RightLeg,
         LeftLeg
     }
@@ -27,12 +25,6 @@ namespace Germinator
 
         [SerializeField]
         private Texture2D eyes;
-
-        [SerializeField]
-        private Texture2D rightArm;
-
-        [SerializeField]
-        private Texture2D leftArm;
 
         [SerializeField]
         private Texture2D rightLeg;
@@ -77,8 +69,6 @@ namespace Germinator
 
             CreateSpriteRenderer(BodyPart.Body, body, 5);
             CreateSpriteRenderer(BodyPart.Eyes, eyes, 7);
-            CreateSpriteRenderer(BodyPart.RightArm, rightArm, 6);
-            CreateSpriteRenderer(BodyPart.LeftArm, leftArm, 2);
             CreateSpriteRenderer(BodyPart.RightLeg, rightLeg, 4);
             CreateSpriteRenderer(BodyPart.LeftLeg, leftLeg, 3);
 

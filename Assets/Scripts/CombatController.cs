@@ -14,9 +14,8 @@ namespace Germinator
         [SerializeField]
         private BoxCollider2D visionCollider;
 
-        [Header("Audio")]
         [SerializeField]
-        private AudioSource punchAudioSource;
+        private GameObject weaponCollection;
 
         private Entity entity;
         private PlayerAnimationController animationController;
@@ -28,6 +27,43 @@ namespace Germinator
         {
             entity = GetComponent<Entity>();
             animationController = GetComponent<PlayerAnimationController>();
+
+            if (entity == null)
+            {
+                Debug.LogError("Entity component is missing from the GameObject.");
+                enabled = false;
+                return;
+            }
+
+            if (animationController == null)
+            {
+                Debug.LogError(
+                    "PlayerAnimationController component is missing from the GameObject."
+                );
+                enabled = false;
+                return;
+            }
+
+            if (detectionCollider == null)
+            {
+                Debug.LogError("Detection Collider is not assigned.");
+                enabled = false;
+                return;
+            }
+
+            if (visionCollider == null)
+            {
+                Debug.LogError("Vision Collider is not assigned.");
+                enabled = false;
+                return;
+            }
+
+            if (weaponCollection == null)
+            {
+                Debug.LogError("Weapon Collection GameObject is not assigned.");
+                enabled = false;
+                return;
+            }
         }
 
         private void Start()
@@ -37,6 +73,9 @@ namespace Germinator
 
         private void Update()
         {
+            if (entity == null)
+                return;
+
             UpdateColliderSizes();
             UpdateClosestEnemy();
             RotateVisionConeTowardsClosestEnemy();
@@ -47,8 +86,32 @@ namespace Germinator
             }
         }
 
+        private Weapon GetActiveWeapon()
+        {
+            if (weaponCollection == null)
+                return null;
+
+            foreach (Transform child in weaponCollection.transform)
+            {
+                if (child == null)
+                    continue;
+                if (child.gameObject.activeSelf)
+                {
+                    Weapon weapon = child.GetComponent<Weapon>();
+                    if (weapon != null)
+                    {
+                        return weapon;
+                    }
+                }
+            }
+            return null;
+        }
+
         private void UpdateColliderSizes()
         {
+            if (detectionCollider == null || visionCollider == null || entity == null)
+                return;
+
             float attackRange = entity.data.attack.range;
             detectionCollider.radius = attackRange;
             visionCollider.size = new Vector2(attackRange, attackRange);
@@ -63,6 +126,7 @@ namespace Germinator
             }
 
             closestEnemy = enemiesInRange
+                .Where(e => e != null && e.GetComponent<Collider2D>() != null)
                 .OrderBy(e =>
                     Vector3.Distance(transform.position, e.GetComponent<Collider2D>().bounds.center)
                 )
@@ -71,15 +135,15 @@ namespace Germinator
 
         private void RotateVisionConeTowardsClosestEnemy()
         {
-            if (closestEnemy == null)
+            if (closestEnemy == null || visionCollider == null)
                 return;
 
-            Vector3 direction = (
-                closestEnemy.GetComponent<Collider2D>().bounds.center - transform.position
-            ).normalized;
-            animationController.targetPosition = closestEnemy
-                .GetComponent<Collider2D>()
-                .bounds.center;
+            Collider2D enemyCollider = closestEnemy.GetComponent<Collider2D>();
+            if (enemyCollider == null)
+                return;
+
+            Vector3 direction = (enemyCollider.bounds.center - transform.position).normalized;
+            animationController.targetPosition = enemyCollider.bounds.center;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
             Vector2 offset =
@@ -108,14 +172,16 @@ namespace Germinator
 
         private void OnTriggerStay2D(Collider2D collider)
         {
-            if (canAttack)
+            if (canAttack && closestEnemy != null && visionCollider != null)
             {
+                Debug.Log("OnTriggerStay2D");
                 StartCoroutine(HandleAttack());
             }
         }
 
         private IEnumerator HandleAttack()
         {
+            Debug.Log("Execute HandleAttack");
             canAttack = false;
 
             Vector3 boxCenter = visionCollider.transform.TransformPoint(visionCollider.offset);
@@ -127,25 +193,33 @@ namespace Germinator
 
             foreach (Collider2D target in targetsInVision)
             {
+                if (target == null)
+                    continue;
+
                 Entity targetEntity = target.GetComponent<Entity>();
-                if (targetEntity != null && targetEntity.type != entity.type)
+                if (targetEntity != null && entity != null && targetEntity.type != entity.type)
                 {
                     Debug.Log("Punch : " + target.gameObject.name);
-                    // Attack(targetEntity);
+                    Attack(targetEntity);
                 }
             }
 
-            punchAudioSource.Play();
-            Debug.Log("Punch Animation");
-            StartCoroutine(animationController.Punch());
+            Weapon activeWeapon = GetActiveWeapon();
+            if (activeWeapon != null && closestEnemy != null)
+            {
+                StartCoroutine(activeWeapon.Attack(closestEnemy));
+            }
 
-            yield return new WaitForSeconds(entity.data.attack.speed);
+            yield return new WaitForSeconds(entity != null ? entity.data.attack.speed : 0f);
             canAttack = true;
         }
 
         private void Attack(Entity targetEntity)
         {
-            targetEntity?.OnTakeDamage(entity.data.attack.damage);
+            if (targetEntity == null || entity?.data.attack == null)
+                return;
+
+            targetEntity.OnTakeDamage(entity.data.attack.damage);
         }
     }
 }
