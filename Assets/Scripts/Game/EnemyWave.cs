@@ -1,14 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Germinator;
-using UnityEditor.Tilemaps;
 using UnityEngine;
 
 namespace Germinator
 {
     [Serializable]
-    public readonly struct EnemyWaveStep
+    public struct EnemyWaveStep
     {
         public EnemyWaveStep(float time, EnemyType type, int quantity)
         {
@@ -18,15 +15,15 @@ namespace Germinator
         }
 
         // Time when the step should be triggered
-        public readonly float Time { get; }
+        public float Time;
         // Type of enemy to spawn
-        public readonly EnemyType Type { get; }
+        public EnemyType Type;
         // Quantity of enemies to spawn
-        public readonly int Quantity { get; }
+        public int Quantity;
     }
 
     [Serializable]
-    public readonly struct EnemyWave
+    public struct EnemyWave
     {
         public EnemyWave(float duration, EnemyWaveStep[] steps)
         {
@@ -34,11 +31,10 @@ namespace Germinator
             Steps = steps;
         }
 
-
         // Duration in seconds of the wave
-        public readonly float Duration { get; }
+        public float Duration;
         // Steps of the wave
-        public readonly EnemyWaveStep[] Steps { get; }
+        public EnemyWaveStep[] Steps;
     }
 
     public class EnemyWaveBuilder

@@ -22,7 +22,7 @@ namespace Germinator
     }
 
     [InitializeOnLoad]
-    [CreateAssetMenu(fileName = "Assets/Resources/EnemyCollection2.asset", menuName = "Germinator/EnemyCollection")]
+    [CreateAssetMenu(fileName = "Assets/Resources/EnemyCollection.asset", menuName = "Germinator/EnemyCollection")]
     public class EnemyCollection : ScriptableObject
     {
         [SerializeField] private EnemyInfo[] enemies = Array.Empty<EnemyInfo>();

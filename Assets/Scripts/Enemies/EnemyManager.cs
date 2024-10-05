@@ -26,10 +26,6 @@ namespace Germinator
             {
                 enemies[i] = new EnemyController[0];
             }
-
-            EnemyType[] types = { EnemyType.Type1 };
-            EnemyWave wave = EnemyWaveBuilder.Random(60, 10, 10, 60, types);
-            Debug.Log(wave);
         }
 
         public void Init(EnemyType type, int quantity)
