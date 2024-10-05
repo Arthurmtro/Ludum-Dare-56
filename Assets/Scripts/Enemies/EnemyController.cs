@@ -36,11 +36,11 @@ namespace Germinator
         {
             var direction = position - transform.position;
 
-            rigidBody.velocity = randomSpeedMultiplier * speed * Time.deltaTime * direction.normalized;
-            // transform.position += randomSpeedMultiplier * speed * Time.deltaTime * direction.normalized;
+            // rigidBody.velocity = randomSpeedMultiplier * speed * direction.normalized;
+            transform.position += randomSpeedMultiplier * speed * Time.deltaTime * direction.normalized;
         }
 
-        void OnCollisionEnter(Collision collision)
+        void OnTriggerEnter2D(Collider2D collider)
         {
             Debug.Log("Collides");
             IsActive = false;

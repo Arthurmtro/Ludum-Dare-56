@@ -13,6 +13,7 @@ namespace Germinator
         [SerializeField] private Transform playerTransform;
 
         private EnemyController[][] enemies = Array.Empty<EnemyController[]>();
+        private int[] lastIndices = Array.Empty<int>();
         private readonly System.Random random = new();
 
         #endregion
@@ -20,6 +21,7 @@ namespace Germinator
         void Start()
         {
             enemies = new EnemyController[enemyCollection.Count][];
+            lastIndices = new int[enemyCollection.Count];
             for (int i = 0; i < enemies.Length; i++)
             {
                 enemies[i] = new EnemyController[0];
@@ -60,11 +62,13 @@ namespace Germinator
         {
             int enemyIndex = enemyCollection.GetIndex(type);
             int remaining = quantity;
-            int index = 0;
+            int index = lastIndices[enemyIndex];
+            int attempts = 0;
             var enemies = this.enemies[enemyIndex];
             Vector3 position = playerTransform.position + (Vector3)GetRandomPosition(4);
-            while (remaining > 0 && index < enemies.Length)
+            while (remaining > 0 && attempts < enemies.Length)
             {
+                index %= enemies.Length;
                 var enemy = enemies[index];
                 if (!enemy.IsActive)
                 {
@@ -74,7 +78,10 @@ namespace Germinator
                 }
 
                 index++;
+                attempts++;
             }
+
+            lastIndices[enemyIndex] = index;
         }
 
         public void Clear()
