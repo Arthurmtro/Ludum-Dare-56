@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Germinator
 {
-    public enum EnemyType
+    public enum EnemyType : uint
     {
         Type1 = 1,
     }

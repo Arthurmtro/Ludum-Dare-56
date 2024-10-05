@@ -90,7 +90,11 @@ namespace Germinator
                 }
             }
 
-            enemies = Array.Empty<EnemyController[]>();
+            enemies = new EnemyController[enemyCollection.Count][];
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                enemies[i] = new EnemyController[0];
+            }
         }
 
         private void ClearEnemyType(int index)
