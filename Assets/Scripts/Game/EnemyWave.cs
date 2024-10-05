@@ -1,9 +1,23 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace Germinator
 {
+    public readonly struct EnemyTypeQuantity
+    {
+        public EnemyTypeQuantity(EnemyType type, int quantity)
+        {
+            Type = type;
+            Quantity = quantity;
+        }
+
+        public EnemyType Type { get; }
+        public int Quantity { get; }
+    }
+
     [Serializable]
     public struct EnemyWaveStep
     {
@@ -35,6 +49,20 @@ namespace Germinator
         public float Duration;
         // Steps of the wave
         public EnemyWaveStep[] Steps;
+
+        public readonly EnemyTypeQuantity[] GetQuantities()
+        {
+            List<EnemyTypeQuantity> result = new();
+            foreach (var step in Steps)
+            {
+                if (step.Quantity > 0)
+                {
+                    result.Add(new EnemyTypeQuantity(step.Type, step.Quantity));
+                }
+            }
+
+            return result.ToArray();
+        }
     }
 
     public class EnemyWaveBuilder
@@ -75,6 +103,11 @@ namespace Germinator
             }
 
             return builder.Build();
+        }
+
+        internal static void Random(float duration, float v1, double v2, float v3, EnemyType[] enemyTypes)
+        {
+            throw new NotImplementedException();
         }
     }
 }

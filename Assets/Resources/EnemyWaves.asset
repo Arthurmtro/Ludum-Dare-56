@@ -12,4 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1fbe3a950e674ab8969bd8f05e2427b, type: 3}
   m_Name: EnemyWaves
   m_EditorClassIdentifier: 
-  waves: []
+  waves:
+  - Duration: 60
+    Steps:
+    - Time: 2
+      Type: 1
+      Quantity: 50
+    - Time: 10
+      Type: 1
+      Quantity: 20
+  - Duration: 60
+    Steps:
+    - Time: 5
+      Type: 1
+      Quantity: 100
