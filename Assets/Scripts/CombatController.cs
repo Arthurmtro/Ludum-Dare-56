@@ -7,65 +7,51 @@ namespace Germinator
 {
     public class CombatController : MonoBehaviour
     {
-        private EntityData entity;
-        private bool canAttack = true;
-        private List<EntityData> enemiesInRange = new List<EntityData>();
-        private EntityData closestEnemy = null;
-
+        [Header("Colliders")]
         [SerializeField]
         private CircleCollider2D detectionCollider;
 
         [SerializeField]
         private BoxCollider2D visionCollider;
 
+        [Header("Audio")]
         [SerializeField]
         private AudioSource punchAudioSource;
 
+        private EntityData entity;
         private PlayerAnimationController animationController;
+        private bool canAttack = true;
+        private readonly List<EntityData> enemiesInRange = new();
+        private EntityData closestEnemy = null;
 
-        void Start()
+        private void Awake()
         {
             entity = GetComponent<EntityData>();
             animationController = GetComponent<PlayerAnimationController>();
+        }
 
+        private void Start()
+        {
             UpdateColliderSizes();
-        }
-
-        void UpdateColliderSizes()
-        {
-            detectionCollider.radius = entity.AttackRange;
-
-            visionCollider.size = new Vector2(entity.AttackRange, entity.AttackRange);
-        }
-
-        private void OnTriggerEnter2D(Collider2D collider)
-        {
-            EntityData targetEntity = collider.GetComponent<EntityData>();
-            if (targetEntity != null && targetEntity.Type != entity.Type)
-            {
-                enemiesInRange.Add(targetEntity);
-            }
-        }
-
-        private void OnTriggerExit2D(Collider2D collider)
-        {
-            EntityData targetEntity = collider.GetComponent<EntityData>();
-            if (targetEntity != null && enemiesInRange.Contains(targetEntity))
-            {
-                enemiesInRange.Remove(targetEntity);
-            }
         }
 
         private void Update()
         {
+            UpdateColliderSizes();
             UpdateClosestEnemy();
             RotateVisionConeTowardsClosestEnemy();
-            UpdateColliderSizes();
 
             if (canAttack && closestEnemy != null)
             {
                 StartCoroutine(HandleAttack());
             }
+        }
+
+        private void UpdateColliderSizes()
+        {
+            float attackRange = entity.AttackRange;
+            detectionCollider.radius = attackRange;
+            visionCollider.size = new Vector2(attackRange, attackRange);
         }
 
         private void UpdateClosestEnemy()
@@ -98,8 +84,34 @@ namespace Germinator
 
             Vector2 offset =
                 new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad))
-                * (visionCollider.size.y / 2f);
+                * (visionCollider.size.x / 2f);
             visionCollider.offset = offset;
+        }
+
+        private void OnTriggerEnter2D(Collider2D collider)
+        {
+            EntityData targetEntityData = collider.GetComponent<EntityData>();
+            if (targetEntityData != null && targetEntityData.Type != entity.Type)
+            {
+                enemiesInRange.Add(targetEntityData);
+            }
+        }
+
+        private void OnTriggerExit2D(Collider2D collider)
+        {
+            EntityData targetEntityData = collider.GetComponent<EntityData>();
+            if (targetEntityData != null)
+            {
+                enemiesInRange.Remove(targetEntityData);
+            }
+        }
+
+        private void OnTriggerStay2D(Collider2D collider)
+        {
+            if (canAttack)
+            {
+                StartCoroutine(HandleAttack());
+            }
         }
 
         private IEnumerator HandleAttack()
@@ -112,38 +124,28 @@ namespace Germinator
                 visionCollider.size,
                 visionCollider.transform.eulerAngles.z
             );
+
             foreach (Collider2D target in targetsInVision)
             {
-                EntityData targetEntity = target.GetComponent<EntityData>();
-                if (targetEntity != null && targetEntity.Type != entity.Type)
+                EntityDataData targetEntityData = target.GetComponent<EntityDataData>();
+                if (targetEntityData != null && targetEntityData.Type != entity.Type)
                 {
                     Debug.Log("Punch : " + target.gameObject.name);
-                    // Attack(targetEntity);
+                    // Attack(targetEntityData);
                 }
             }
 
-            // punchAudioSource.Play();
-            Debug.Log("Punch Animation ");
+            punchAudioSource.Play();
+            Debug.Log("Punch Animation");
             StartCoroutine(animationController.Punch());
 
             yield return new WaitForSeconds(entity.AttackSpeed);
             canAttack = true;
         }
 
-        private void OnTriggerStay2D(Collider2D collider)
+        private void Attack(EntityData targetEntityData)
         {
-            if (canAttack)
-            {
-                StartCoroutine(HandleAttack());
-            }
-        }
-
-        public void Attack(EntityData targetEntity)
-        {
-            if (targetEntity != null)
-            {
-                targetEntity.OnTakeDamage(entity.AttackDamage);
-            }
+            targetEntityData?.OnTakeDamage(entity.AttackDamage);
         }
     }
 }
