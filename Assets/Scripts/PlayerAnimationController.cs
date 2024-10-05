@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 namespace Germinator
 {
@@ -7,7 +7,6 @@ namespace Germinator
     {
         [Header("Sprite manager")]
         public EntitySpriteManager spriteManager;
-
 
         [Header("Eyes animation")]
         [SerializeField]
@@ -41,6 +40,7 @@ namespace Germinator
         public bool isWalking = false;
 
         private Vector3 initialEyesPosition;
+        public Vector3 targetPosition;
         private Vector3 mousePositionInWorld;
 
         private int bodyDirection = 1;
@@ -53,8 +53,7 @@ namespace Germinator
         void Update()
         {
             // Get the mouse position in world space
-            Vector3 mousePosition = Input.mousePosition;
-            mousePositionInWorld = Camera.main.ScreenToWorldPoint(mousePosition);
+            mousePositionInWorld = targetPosition;
             mousePositionInWorld.z = 0f;
 
             BodyTracking();
@@ -75,12 +74,12 @@ namespace Germinator
 
             if (directionToMouse.x < 0)
             {
-                transform.localScale = new Vector3(1, 1, 1);  // Flip character to the left
+                spriteManager.bodyParts.transform.localScale = new Vector3(0.15f, 0.15f, 1);
                 bodyDirection = 1;
             }
             else
             {
-                transform.localScale = new Vector3(-1, 1, 1);   // Flip character to the right
+                spriteManager.bodyParts.transform.localScale = new Vector3(-0.15f, 0.15f, 1);
                 bodyDirection = -1;
             }
         }
@@ -88,11 +87,17 @@ namespace Germinator
         private void EyesTracking()
         {
             Vector3 eyesPosition = spriteManager.GetBodyPart(BodyPart.Eyes).transform.localPosition;
-            Vector3 directionToMouse = (mousePositionInWorld - spriteManager.GetBodyPart(BodyPart.Body).transform.position).normalized;
+            Vector3 directionToMouse = (
+                mousePositionInWorld - spriteManager.GetBodyPart(BodyPart.Body).transform.position
+            ).normalized;
             directionToMouse.x *= bodyDirection;
 
             Vector3 eyesTargetPosition = initialEyesPosition + directionToMouse * eyesMaxMoveRange;
-            spriteManager.GetBodyPart(BodyPart.Eyes).transform.localPosition = Vector3.Lerp(eyesPosition, eyesTargetPosition, eyesMoveSpeed * Time.deltaTime);
+            spriteManager.GetBodyPart(BodyPart.Eyes).transform.localPosition = Vector3.Lerp(
+                eyesPosition,
+                eyesTargetPosition,
+                eyesMoveSpeed * Time.deltaTime
+            );
         }
 
         private void ArmsTracking()
@@ -109,15 +114,25 @@ namespace Germinator
             directionToMouse.x *= bodyDirection * armSide;
 
             Vector3 armPosition = spriteManager.GetBodyPart(armPart).transform.localPosition;
-            Vector3 armTargetPosition = spriteManager.GetBodyPart(BodyPart.Body).transform.localPosition + directionToMouse * armDistanceFromBody;
-            Vector3 directionToMouseWorld = mousePositionInWorld - spriteManager.GetBodyPart(armPart).transform.position;
-            float angle = Mathf.Atan2(directionToMouseWorld.y, directionToMouseWorld.x) * Mathf.Rad2Deg;
+            Vector3 armTargetPosition =
+                spriteManager.GetBodyPart(BodyPart.Body).transform.localPosition
+                + directionToMouse * armDistanceFromBody;
+            Vector3 directionToMouseWorld =
+                mousePositionInWorld - spriteManager.GetBodyPart(armPart).transform.position;
+            float angle =
+                Mathf.Atan2(directionToMouseWorld.y, directionToMouseWorld.x) * Mathf.Rad2Deg;
 
-            spriteManager.GetBodyPart(armPart).transform.localPosition = Vector3.Lerp(armPosition, armTargetPosition, armMoveSpeed * Time.deltaTime);
+            spriteManager.GetBodyPart(armPart).transform.localPosition = Vector3.Lerp(
+                armPosition,
+                armTargetPosition,
+                armMoveSpeed * Time.deltaTime
+            );
             spriteManager.GetBodyPart(armPart).transform.rotation = Quaternion.Euler(0, 0, angle);
 
-            spriteManager.GetBodyPart(armPart).GetComponent<SpriteRenderer>().flipX = bodyDirection == 1;
-            spriteManager.GetBodyPart(armPart).GetComponent<SpriteRenderer>().flipY = bodyDirection == 1;
+            spriteManager.GetBodyPart(armPart).GetComponent<SpriteRenderer>().flipX =
+                bodyDirection == 1;
+            spriteManager.GetBodyPart(armPart).GetComponent<SpriteRenderer>().flipY =
+                bodyDirection == 1;
         }
 
         private void LegsSwinging()
@@ -131,24 +146,38 @@ namespace Germinator
             float swingAngle = Mathf.Sin(Time.time * legSwingSpeed) * legSwingAngle;
 
             // Apply the swing angle to the left and right legs
-            spriteManager.GetBodyPart(BodyPart.LeftLeg).transform.localRotation = Quaternion.Euler(0, 0, swingAngle);
-            spriteManager.GetBodyPart(BodyPart.RightLeg).transform.localRotation = Quaternion.Euler(0, 0, -swingAngle);
+            spriteManager.GetBodyPart(BodyPart.LeftLeg).transform.localRotation = Quaternion.Euler(
+                0,
+                0,
+                swingAngle
+            );
+            spriteManager.GetBodyPart(BodyPart.RightLeg).transform.localRotation = Quaternion.Euler(
+                0,
+                0,
+                -swingAngle
+            );
         }
 
-        private IEnumerator Punch()
+        public IEnumerator Punch()
         {
             isPunching = true;
 
             // Get world positions for the initial and target punch positions
-            Vector3 leftArmInitialPosition = spriteManager.GetBodyPart(BodyPart.LeftArm).transform.position;
-            Vector3 rightArmInitialPosition = spriteManager.GetBodyPart(BodyPart.RightArm).transform.position;
+            Vector3 leftArmInitialPosition = spriteManager
+                .GetBodyPart(BodyPart.LeftArm)
+                .transform.position;
+            Vector3 rightArmInitialPosition = spriteManager
+                .GetBodyPart(BodyPart.RightArm)
+                .transform.position;
 
             // Calculate punch target position (mouse position) with punchDistance
             Vector3 directionToMouse = (mousePositionInWorld - leftArmInitialPosition).normalized;
-            Vector3 leftArmTargetPosition = leftArmInitialPosition + directionToMouse * punchDistance;
+            Vector3 leftArmTargetPosition =
+                leftArmInitialPosition + directionToMouse * punchDistance;
 
             directionToMouse = (mousePositionInWorld - rightArmInitialPosition).normalized;
-            Vector3 rightArmTargetPosition = rightArmInitialPosition + directionToMouse * punchDistance;
+            Vector3 rightArmTargetPosition =
+                rightArmInitialPosition + directionToMouse * punchDistance;
 
             float punchDuration = 0.2f;
             float elapsedTime = 0f;
@@ -156,8 +185,16 @@ namespace Germinator
             // Move hands to the target (mouse) position with punch distance
             while (elapsedTime < punchDuration)
             {
-                spriteManager.GetBodyPart(BodyPart.LeftArm).transform.position = Vector3.Lerp(leftArmInitialPosition, leftArmTargetPosition, (elapsedTime / punchDuration));
-                spriteManager.GetBodyPart(BodyPart.RightArm).transform.position = Vector3.Lerp(rightArmInitialPosition, rightArmTargetPosition, (elapsedTime / punchDuration));
+                spriteManager.GetBodyPart(BodyPart.LeftArm).transform.position = Vector3.Lerp(
+                    leftArmInitialPosition,
+                    leftArmTargetPosition,
+                    (elapsedTime / punchDuration)
+                );
+                spriteManager.GetBodyPart(BodyPart.RightArm).transform.position = Vector3.Lerp(
+                    rightArmInitialPosition,
+                    rightArmTargetPosition,
+                    (elapsedTime / punchDuration)
+                );
 
                 elapsedTime += Time.deltaTime;
                 yield return null;
@@ -168,8 +205,16 @@ namespace Germinator
             // Move hands back to their initial positions
             while (elapsedTime < punchDuration)
             {
-                spriteManager.GetBodyPart(BodyPart.LeftArm).transform.position = Vector3.Lerp(leftArmTargetPosition, leftArmInitialPosition, (elapsedTime / punchDuration));
-                spriteManager.GetBodyPart(BodyPart.RightArm).transform.position = Vector3.Lerp(rightArmTargetPosition, rightArmInitialPosition, (elapsedTime / punchDuration));
+                spriteManager.GetBodyPart(BodyPart.LeftArm).transform.position = Vector3.Lerp(
+                    leftArmTargetPosition,
+                    leftArmInitialPosition,
+                    (elapsedTime / punchDuration)
+                );
+                spriteManager.GetBodyPart(BodyPart.RightArm).transform.position = Vector3.Lerp(
+                    rightArmTargetPosition,
+                    rightArmInitialPosition,
+                    (elapsedTime / punchDuration)
+                );
 
                 elapsedTime += Time.deltaTime;
                 yield return null;
@@ -178,6 +223,5 @@ namespace Germinator
             // Reset the isPunching flag once the punch is completed
             isPunching = false;
         }
-
     }
 }

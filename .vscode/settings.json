@@ -56,6 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Germinator.sln",
+    "dotnet.defaultSolution": "Ludum-Dare-56.sln",
     "cSpell.words": ["Behaviour","Lerp","Mathf","Rigidbody"]
 }

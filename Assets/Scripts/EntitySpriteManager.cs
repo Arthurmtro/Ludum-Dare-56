@@ -41,7 +41,7 @@ namespace Germinator
         private Texture2D leftLeg;
         #endregion
 
-        private GameObject bodyParts;
+        public GameObject bodyParts;
 
         private void OnValidate()
         {
@@ -82,10 +82,8 @@ namespace Germinator
             CreateSpriteRenderer(BodyPart.RightLeg, rightLeg, 4);
             CreateSpriteRenderer(BodyPart.LeftLeg, leftLeg, 3);
 
-
             bodyParts.transform.localScale = new Vector3(0.15f, 0.15f, 1f);
         }
-
 
         private void CreateSpriteRenderer(BodyPart bodyPart, Texture2D texture, int sortingOrder)
         {
@@ -97,7 +95,11 @@ namespace Germinator
             int width = texture.width;
             int height = texture.height;
 
-            spriteRenderer.sprite = Sprite.Create(texture, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f));
+            spriteRenderer.sprite = Sprite.Create(
+                texture,
+                new Rect(0, 0, width, height),
+                new Vector2(0.5f, 0.5f)
+            );
             spriteRenderer.sortingOrder = sortingOrder;
         }
 

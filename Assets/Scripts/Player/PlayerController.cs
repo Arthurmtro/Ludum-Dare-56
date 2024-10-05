@@ -5,9 +5,15 @@ namespace Germinator
     public class PlayerController : MonoBehaviour
     {
         [SerializeField]
-        private float movementSpeed = 2f;
-        public Rigidbody2D rb;
+        public Rigidbody2D rigidBody;
         private Vector2 movementDirection;
+
+        private PlayerEntity playerEntity;
+
+        void Start()
+        {
+            playerEntity = GetComponent<PlayerEntity>();
+        }
 
         void Update()
         {
@@ -19,7 +25,10 @@ namespace Germinator
 
         void FixedUpdate()
         {
-            rb.velocity = movementDirection * movementSpeed * Time.deltaTime;
+            if (rigidBody != null && playerEntity != null)
+            {
+                rigidBody.velocity = playerEntity.MoveSpeed * Time.deltaTime * movementDirection;
+            }
         }
     }
 }
