@@ -73,7 +73,6 @@ namespace Germinator
             bodyParts = new GameObject("BodyParts");
             bodyParts.transform.parent = player.transform;
             bodyParts.transform.localPosition = Vector3.zero;
-            bodyParts.transform.localScale = Vector3.one;
             bodyParts.transform.localRotation = Quaternion.identity;
 
             CreateSpriteRenderer(BodyPart.Body, body, 5);
@@ -82,6 +81,9 @@ namespace Germinator
             CreateSpriteRenderer(BodyPart.LeftArm, leftArm, 2);
             CreateSpriteRenderer(BodyPart.RightLeg, rightLeg, 4);
             CreateSpriteRenderer(BodyPart.LeftLeg, leftLeg, 3);
+
+
+            bodyParts.transform.localScale = new Vector3(0.15f, 0.15f, 1f);
         }
 
 
@@ -91,7 +93,11 @@ namespace Germinator
             spriteObject.transform.parent = bodyParts.transform;
             spriteObject.transform.localPosition = Vector3.zero;
             SpriteRenderer spriteRenderer = spriteObject.AddComponent<SpriteRenderer>();
-            spriteRenderer.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+
+            int width = texture.width;
+            int height = texture.height;
+
+            spriteRenderer.sprite = Sprite.Create(texture, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f));
             spriteRenderer.sortingOrder = sortingOrder;
         }
 

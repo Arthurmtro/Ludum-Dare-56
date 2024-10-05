@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 namespace Germinator
 {
@@ -21,6 +22,14 @@ namespace Germinator
 
         [SerializeField]
         private float armMoveSpeed = 5f;
+
+        [SerializeField]
+        private float punchMoveSpeed = 10f;
+
+        [SerializeField]
+        private float punchDistance = 1f;
+
+        public bool isPunching = false;
 
         [Header("Legs animation")]
         [SerializeField]
@@ -52,6 +61,11 @@ namespace Germinator
             EyesTracking();
             ArmsTracking();
             LegsSwinging();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                StartCoroutine(Punch());
+            }
         }
 
         private void BodyTracking()
@@ -119,6 +133,50 @@ namespace Germinator
             // Apply the swing angle to the left and right legs
             spriteManager.GetBodyPart(BodyPart.LeftLeg).transform.localRotation = Quaternion.Euler(0, 0, swingAngle);
             spriteManager.GetBodyPart(BodyPart.RightLeg).transform.localRotation = Quaternion.Euler(0, 0, -swingAngle);
+        }
+
+        private IEnumerator Punch()
+        {
+            isPunching = true;
+
+            // Get world positions for the initial and target punch positions
+            Vector3 leftArmInitialPosition = spriteManager.GetBodyPart(BodyPart.LeftArm).transform.position;
+            Vector3 rightArmInitialPosition = spriteManager.GetBodyPart(BodyPart.RightArm).transform.position;
+
+            // Calculate punch target position (mouse position) with punchDistance
+            Vector3 directionToMouse = (mousePositionInWorld - leftArmInitialPosition).normalized;
+            Vector3 leftArmTargetPosition = leftArmInitialPosition + directionToMouse * punchDistance;
+
+            directionToMouse = (mousePositionInWorld - rightArmInitialPosition).normalized;
+            Vector3 rightArmTargetPosition = rightArmInitialPosition + directionToMouse * punchDistance;
+
+            float punchDuration = 0.2f;
+            float elapsedTime = 0f;
+
+            // Move hands to the target (mouse) position with punch distance
+            while (elapsedTime < punchDuration)
+            {
+                spriteManager.GetBodyPart(BodyPart.LeftArm).transform.position = Vector3.Lerp(leftArmInitialPosition, leftArmTargetPosition, (elapsedTime / punchDuration));
+                spriteManager.GetBodyPart(BodyPart.RightArm).transform.position = Vector3.Lerp(rightArmInitialPosition, rightArmTargetPosition, (elapsedTime / punchDuration));
+
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            elapsedTime = 0f;
+
+            // Move hands back to their initial positions
+            while (elapsedTime < punchDuration)
+            {
+                spriteManager.GetBodyPart(BodyPart.LeftArm).transform.position = Vector3.Lerp(leftArmTargetPosition, leftArmInitialPosition, (elapsedTime / punchDuration));
+                spriteManager.GetBodyPart(BodyPart.RightArm).transform.position = Vector3.Lerp(rightArmTargetPosition, rightArmInitialPosition, (elapsedTime / punchDuration));
+
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            // Reset the isPunching flag once the punch is completed
+            isPunching = false;
         }
 
     }
