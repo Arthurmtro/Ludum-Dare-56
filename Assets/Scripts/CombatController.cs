@@ -127,7 +127,7 @@ namespace Germinator
 
             foreach (Collider2D target in targetsInVision)
             {
-                EntityDataData targetEntityData = target.GetComponent<EntityDataData>();
+                EntityData targetEntityData = target.GetComponent<EntityData>();
                 if (targetEntityData != null && targetEntityData.Type != entity.Type)
                 {
                     Debug.Log("Punch : " + target.gameObject.name);
