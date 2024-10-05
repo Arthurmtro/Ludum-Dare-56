@@ -13,6 +13,9 @@ namespace Germinator
         private Entity closestEnemy = null;
 
         [SerializeField]
+        private CircleCollider2D detectionCollider;
+
+        [SerializeField]
         private BoxCollider2D visionCollider;
 
         [SerializeField]
@@ -24,6 +27,15 @@ namespace Germinator
         {
             entity = GetComponent<Entity>();
             animationController = GetComponent<PlayerAnimationController>();
+
+            UpdateColliderSizes();
+        }
+
+        void UpdateColliderSizes()
+        {
+            detectionCollider.radius = entity.AttackRange;
+
+            visionCollider.size = new Vector2(entity.AttackRange, entity.AttackRange);
         }
 
         private void OnTriggerEnter2D(Collider2D collider)
@@ -48,6 +60,7 @@ namespace Germinator
         {
             UpdateClosestEnemy();
             RotateVisionConeTowardsClosestEnemy();
+            UpdateColliderSizes();
 
             if (canAttack && closestEnemy != null)
             {
@@ -64,7 +77,9 @@ namespace Germinator
             }
 
             closestEnemy = enemiesInRange
-                .OrderBy(e => Vector3.Distance(transform.position, e.transform.position))
+                .OrderBy(e =>
+                    Vector3.Distance(transform.position, e.GetComponent<Collider2D>().bounds.center)
+                )
                 .FirstOrDefault();
         }
 
@@ -73,11 +88,14 @@ namespace Germinator
             if (closestEnemy == null)
                 return;
 
-            Vector3 direction = (closestEnemy.transform.position - transform.position).normalized;
-            animationController.targetPosition = closestEnemy.transform.position;
+            Vector3 direction = (
+                closestEnemy.GetComponent<Collider2D>().bounds.center - transform.position
+            ).normalized;
+            animationController.targetPosition = closestEnemy
+                .GetComponent<Collider2D>()
+                .bounds.center;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-            // Adjust offset to make sure the vision collider points towards the enemy without modifying the transform rotation
             Vector2 offset =
                 new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad))
                 * (visionCollider.size.y / 2f);
