@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace Germinator
 {
-    public class EnemyEntity : EntityData
+    public class EnemyEntity : Entity
     {
         EnemyEntity()
         {
-            entityType = EntityType.Enemy;
+            type = EntityType.Enemy;
         }
     }
 }

@@ -1,8 +1,11 @@
+using System;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace Germinator
 {
-    public abstract class EntityData : MonoBehaviour
+    public abstract class Entity : MonoBehaviour
     {
         public enum EntityType
         {
@@ -10,8 +13,18 @@ namespace Germinator
             Enemy
         }
 
+        [Serializable]
+        public struct Data
+        {
+            public EnemyType type;
+            public string name;
+            public EnemyController prefab;
+            public string hp;
+            public float speed;
+        }
+
         #region Stats Properties
-        protected EntityType entityType;
+        protected EntityType type;
 
         [Header("Entity Stats")]
         [SerializeField]
@@ -66,7 +79,7 @@ namespace Germinator
 
         public EntityType Type
         {
-            get => entityType;
+            get => type;
         }
         #endregion
 

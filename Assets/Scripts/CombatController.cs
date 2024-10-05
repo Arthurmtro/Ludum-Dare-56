@@ -18,15 +18,15 @@ namespace Germinator
         [SerializeField]
         private AudioSource punchAudioSource;
 
-        private EntityData entity;
+        private Entity entity;
         private PlayerAnimationController animationController;
         private bool canAttack = true;
-        private readonly List<EntityData> enemiesInRange = new();
-        private EntityData closestEnemy = null;
+        private readonly List<Entity> enemiesInRange = new();
+        private Entity closestEnemy = null;
 
         private void Awake()
         {
-            entity = GetComponent<EntityData>();
+            entity = GetComponent<Entity>();
             animationController = GetComponent<PlayerAnimationController>();
         }
 
@@ -90,19 +90,19 @@ namespace Germinator
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
-            EntityData targetEntityData = collider.GetComponent<EntityData>();
-            if (targetEntityData != null && targetEntityData.Type != entity.Type)
+            Entity targetEntity = collider.GetComponent<Entity>();
+            if (targetEntity != null && targetEntity.Type != entity.Type)
             {
-                enemiesInRange.Add(targetEntityData);
+                enemiesInRange.Add(targetEntity);
             }
         }
 
         private void OnTriggerExit2D(Collider2D collider)
         {
-            EntityData targetEntityData = collider.GetComponent<EntityData>();
-            if (targetEntityData != null)
+            Entity targetEntity = collider.GetComponent<Entity>();
+            if (targetEntity != null)
             {
-                enemiesInRange.Remove(targetEntityData);
+                enemiesInRange.Remove(targetEntity);
             }
         }
 
@@ -127,11 +127,11 @@ namespace Germinator
 
             foreach (Collider2D target in targetsInVision)
             {
-                EntityData targetEntityData = target.GetComponent<EntityData>();
-                if (targetEntityData != null && targetEntityData.Type != entity.Type)
+                Entity targetEntity = target.GetComponent<Entity>();
+                if (targetEntity != null && targetEntity.Type != entity.Type)
                 {
                     Debug.Log("Punch : " + target.gameObject.name);
-                    // Attack(targetEntityData);
+                    // Attack(targetEntity);
                 }
             }
 
@@ -143,9 +143,9 @@ namespace Germinator
             canAttack = true;
         }
 
-        private void Attack(EntityData targetEntityData)
+        private void Attack(Entity targetEntity)
         {
-            targetEntityData?.OnTakeDamage(entity.AttackDamage);
+            targetEntity?.OnTakeDamage(entity.AttackDamage);
         }
     }
 }
