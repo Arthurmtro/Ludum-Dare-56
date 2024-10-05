@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Germinator
@@ -20,46 +18,51 @@ namespace Germinator
         [Tooltip("How smoothly the camera follows the target.")]
         private float smoothSpeed = 0.125f;
 
+        #region Zoom
         [SerializeField]
         [Header("Zoom Settings")]
-        [Tooltip("How smoothly the camera zooms in and out.")]
-        private float zoomSmoothSpeed = 0.1f;
-
-        [SerializeField]
-        [Tooltip("The maximum zoom level")]
-        private float maxZoom = 0.05f;
-
-        [SerializeField]
         [Tooltip("Whether the camera should perform repetitive zoom in and out.")]
         private bool isZooming = false;
 
         [SerializeField]
-        [Tooltip("Speed at which the camera oscillates between zoom levels.")]
-        private float zoomOscillationSpeed = 6f;
+        [Tooltip("How much the camera zooms in")]
+        private float zoomFactor = 0.05f;
 
         [SerializeField]
+        [Tooltip("How smoothly the camera zooms in and out.")]
+        private float zoomSmoothSpeed = 0.1f;
+
+        [SerializeField]
+        [Tooltip("Speed at which the camera oscillates between zoom levels.")]
+        private float zoomOscillationSpeed = 6f;
+        #endregion
+
+        #region Rotation
+        [SerializeField]
         [Header("Rotation Settings")]
-        [Tooltip("Maximum angle to rotate ")]
-        private float maxRotation = 1f;
+        [Tooltip("Whether the camera should perform repetitive left-right rotation.")]
+        private bool isRotating = false;
+
+        [SerializeField]
+        [Tooltip("How much the camera rotates left and right.")]
+        private float rotationFactor = 1f;
 
         [SerializeField]
         [Tooltip("Rotation speed for reaching the desired angle.")]
         private float rotationSmoothSpeed = 0.1f;
 
         [SerializeField]
-        [Tooltip("Whether the camera should perform repetitive left-right rotation.")]
-        private bool isRotating = false;
-
-        [SerializeField]
         [Tooltip("Speed at which the camera oscillates between angles.")]
         private float oscillationSpeed = 3f;
+        #endregion
 
-        private float targetZoom;
         private Camera cam;
+
         private Vector3 velocity = Vector3.zero;
         private Vector3 offset;
         private float currentRotationTime = 0f;
         private float currentZoomTime = 0f;
+        private float targetZoom;
 
         void Start()
         {
@@ -70,8 +73,9 @@ namespace Germinator
         void LateUpdate()
         {
             FollowPlayer();
-            HandleZoom();
-            HandleRotation();
+
+            HandleZoomEffect();
+            HandleRotationEffect();
         }
 
         private void FollowPlayer()
@@ -86,46 +90,43 @@ namespace Germinator
             transform.position = smoothedPosition;
         }
 
-        private void HandleZoom()
+        private void HandleZoomEffect()
         {
-            if (isZooming)
+            if (!cam || !isZooming)
             {
-                currentZoomTime += Time.deltaTime * zoomOscillationSpeed;
-                float t = (Mathf.Sin(currentZoomTime) + 1f) / 2f;
-                targetZoom = Mathf.Lerp(baseDistance, baseDistance + maxZoom, t);
-            }
-            else
-            {
-                float scrollInput = Input.GetAxis("Mouse ScrollWheel");
-                targetZoom -= scrollInput * zoomSmoothSpeed;
-                targetZoom = Mathf.Clamp(targetZoom, baseDistance, baseDistance + maxZoom);
+                if (cam.orthographicSize != baseDistance)
+                {
+                    cam.orthographicSize = baseDistance;
+                }
+                return;
             }
 
-            if (cam != null)
-            {
-                float smoothZoom = Mathf.Lerp(cam.orthographicSize, targetZoom, zoomSmoothSpeed);
-                cam.orthographicSize = smoothZoom;
-            }
+            currentZoomTime += Time.deltaTime * zoomOscillationSpeed;
+
+            float t = (Mathf.Sin(currentZoomTime) + 1f) / 2f;
+            targetZoom = Mathf.Lerp(baseDistance, baseDistance - zoomFactor, t);
+
+            float smoothZoom = Mathf.Lerp(cam.orthographicSize, targetZoom, zoomSmoothSpeed);
+            cam.orthographicSize = smoothZoom;
         }
 
-        private void HandleRotation()
+        private void HandleRotationEffect()
         {
-            if (isRotating)
+            if (!isRotating)
             {
-                currentRotationTime += Time.deltaTime * oscillationSpeed;
-                float t = (Mathf.Sin(currentRotationTime) + 1f) / 2f;
-                float angle = Mathf.Lerp(-maxRotation, maxRotation, t);
-                transform.rotation = Quaternion.Euler(0, 0, angle);
+                if (transform.rotation != Quaternion.identity)
+                {
+                    currentRotationTime = 0f;
+                    transform.rotation = Quaternion.identity;
+                }
+                return;
             }
-            else
-            {
-                float smoothRotation = Mathf.LerpAngle(
-                    transform.eulerAngles.z,
-                    0f,
-                    rotationSmoothSpeed
-                );
-                transform.rotation = Quaternion.Euler(0, 0, smoothRotation);
-            }
+
+
+            currentRotationTime += Time.deltaTime * oscillationSpeed;
+            float t = (Mathf.Sin(currentRotationTime) + 1f) / 2f;
+            float angle = Mathf.Lerp(-rotationFactor, rotationFactor, t);
+            transform.rotation = Quaternion.Euler(0, 0, angle);
         }
 
         public void SetRotationState(bool enable)
