@@ -1,11 +1,14 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Germinator
 {
+    [RequireComponent(typeof(Rigidbody2D))]
     public class EnemyController : MonoBehaviour
     {
         #region Variables
 
+        private Rigidbody2D rigidBody;
         private float speed = 1.0f;
         private float randomSpeedMultiplier;
         private readonly System.Random random = new();
@@ -20,6 +23,7 @@ namespace Germinator
 
         void Start()
         {
+            rigidBody = GetComponent<Rigidbody2D>();
             randomSpeedMultiplier = 1 + (float)random.NextDouble();
         }
 
@@ -32,7 +36,14 @@ namespace Germinator
         {
             var direction = position - transform.position;
 
-            transform.position += randomSpeedMultiplier * speed * Time.deltaTime * direction.normalized;
+            rigidBody.velocity = randomSpeedMultiplier * speed * Time.deltaTime * direction.normalized;
+            // transform.position += randomSpeedMultiplier * speed * Time.deltaTime * direction.normalized;
+        }
+
+        void OnCollisionEnter(Collision collision)
+        {
+            Debug.Log("Collides");
+            IsActive = false;
         }
     }
 }
