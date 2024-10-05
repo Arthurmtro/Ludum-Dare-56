@@ -7,10 +7,10 @@ namespace Germinator
 {
     public class CombatController : MonoBehaviour
     {
-        private Entity entity;
+        private EntityData entity;
         private bool canAttack = true;
-        private List<Entity> enemiesInRange = new List<Entity>();
-        private Entity closestEnemy = null;
+        private List<EntityData> enemiesInRange = new List<EntityData>();
+        private EntityData closestEnemy = null;
 
         [SerializeField]
         private CircleCollider2D detectionCollider;
@@ -25,7 +25,7 @@ namespace Germinator
 
         void Start()
         {
-            entity = GetComponent<Entity>();
+            entity = GetComponent<EntityData>();
             animationController = GetComponent<PlayerAnimationController>();
 
             UpdateColliderSizes();
@@ -40,7 +40,7 @@ namespace Germinator
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
-            Entity targetEntity = collider.GetComponent<Entity>();
+            EntityData targetEntity = collider.GetComponent<EntityData>();
             if (targetEntity != null && targetEntity.Type != entity.Type)
             {
                 enemiesInRange.Add(targetEntity);
@@ -49,7 +49,7 @@ namespace Germinator
 
         private void OnTriggerExit2D(Collider2D collider)
         {
-            Entity targetEntity = collider.GetComponent<Entity>();
+            EntityData targetEntity = collider.GetComponent<EntityData>();
             if (targetEntity != null && enemiesInRange.Contains(targetEntity))
             {
                 enemiesInRange.Remove(targetEntity);
@@ -114,15 +114,15 @@ namespace Germinator
             );
             foreach (Collider2D target in targetsInVision)
             {
-                Entity targetEntity = target.GetComponent<Entity>();
+                EntityData targetEntity = target.GetComponent<EntityData>();
                 if (targetEntity != null && targetEntity.Type != entity.Type)
                 {
                     Debug.Log("Punch : " + target.gameObject.name);
-                    Attack(targetEntity);
+                    // Attack(targetEntity);
                 }
             }
 
-            punchAudioSource.Play();
+            // punchAudioSource.Play();
             Debug.Log("Punch Animation ");
             StartCoroutine(animationController.Punch());
 
@@ -138,7 +138,7 @@ namespace Germinator
             }
         }
 
-        public void Attack(Entity targetEntity)
+        public void Attack(EntityData targetEntity)
         {
             if (targetEntity != null)
             {

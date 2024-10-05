@@ -2,13 +2,16 @@ using UnityEngine;
 
 namespace Germinator
 {
-    public abstract class Entity : MonoBehaviour
+    public abstract class EntityData : MonoBehaviour
     {
         public enum EntityType
         {
             Player,
             Enemy
         }
+
+        #region Stats Properties
+        protected EntityType entityType;
 
         [Header("Entity Stats")]
         [SerializeField]
@@ -30,9 +33,10 @@ namespace Germinator
         [SerializeField]
         [Tooltip("The attack range for the entity's circle collider.")]
         protected float attackRange = 1.5f;
+        #endregion
 
-        protected EntityType entityType;
 
+        #region Getters and Setters
         public float Health
         {
             get => health;
@@ -64,10 +68,11 @@ namespace Germinator
         {
             get => entityType;
         }
+        #endregion
 
-        public virtual void OnAttack() { }
+        public void OnAttack() { }
 
-        public virtual void OnTakeDamage(float damage)
+        public void OnTakeDamage(float damage)
         {
             health -= damage;
 
@@ -77,7 +82,7 @@ namespace Germinator
             }
         }
 
-        public virtual void OnDie()
+        public void OnDie()
         {
             Destroy(gameObject);
         }

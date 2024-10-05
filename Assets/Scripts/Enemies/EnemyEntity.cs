@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Germinator
 {
-    public class EnemyEntity : Entity
+    public class EnemyEntity : EntityData
     {
         EnemyEntity()
         {
