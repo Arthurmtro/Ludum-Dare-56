@@ -2,14 +2,11 @@ using UnityEngine;
 
 namespace Germinator
 {
-    public class Enemy : MonoBehaviour
+    public class EnemyController : MonoBehaviour
     {
         #region Variables
 
-        [Header("Stats")]
-        [SerializeField] private int health;
-        [SerializeField] private int maxHealth;
-        [SerializeField][Range(0, 10)] private float speed;
+        private float speed = 1.0f;
         private float randomSpeedMultiplier;
         private readonly System.Random random = new();
 
@@ -24,10 +21,12 @@ namespace Germinator
         void Start()
         {
             randomSpeedMultiplier = 1 + (float)random.NextDouble();
-            print(randomSpeedMultiplier);
         }
 
-
+        public void Initialize(EnemyInfo info)
+        {
+            speed = info.speed;
+        }
 
         public void MoveTowards(Vector3 position)
         {

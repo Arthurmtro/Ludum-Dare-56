@@ -4,81 +4,64 @@ using UnityEngine;
 
 namespace Germinator
 {
-    [Serializable]
-    public class EnemyDefinition
-    {
-        public string name;
-        public Enemy prefab;
-    }
-
-    class EnemyDefinitionWithIndex : EnemyDefinition
-    {
-        public readonly int index;
-
-        public EnemyDefinitionWithIndex(int index, EnemyDefinition definition)
-        {
-            name = definition.name;
-            prefab = definition.prefab;
-            this.index = index;
-        }
-    }
-
     public class EnemyManager : MonoBehaviour
     {
         #region Variables
 
         [Header("Input")]
+        [SerializeField] private EnemyCollection enemyCollection;
         [SerializeField] private Transform playerTransform;
-        [SerializeField] private EnemyDefinition[] inputDefinitions = Array.Empty<EnemyDefinition>();
-        [SerializeField][Range(0, 500)] private int bufferSize = 100;
 
-        private EnemyDefinitionWithIndex[] definitions = Array.Empty<EnemyDefinitionWithIndex>();
-
-        private Enemy[][] enemies = Array.Empty<Enemy[]>();
-        private System.Random random = new System.Random();
+        private EnemyController[][] enemies = Array.Empty<EnemyController[]>();
+        private readonly System.Random random = new();
 
         #endregion
 
-        public void Init()
+        void Start()
         {
-            Clear();
-
-            enemies = new Enemy[inputDefinitions.Length][];
-            definitions = new EnemyDefinitionWithIndex[inputDefinitions.Length];
-            for (int i = 0; i < inputDefinitions.Length; i++)
+            enemies = new EnemyController[enemyCollection.Count][];
+            for (int i = 0; i < enemies.Length; i++)
             {
-                EnemyDefinitionWithIndex definition = new EnemyDefinitionWithIndex(i, inputDefinitions[i]);
-                definitions[i] = definition;
-                enemies[definition.index] = new Enemy[bufferSize];
-                for (int j = 0; j < bufferSize; j++)
-                {
-                    Enemy enemy = Instantiate(definition.prefab, transform);
-                    enemy.name = $"{definition.name} [{j}]";
-                    enemies[i][j] = enemy;
-                }
+                enemies[i] = new EnemyController[0];
             }
+        }
+
+        public void Init(EnemyType type, int quantity)
+        {
+            var enemyInfo = enemyCollection.ByType(type);
+            int index = enemyCollection.GetIndex(type);
+            ClearEnemyType(index);
+            enemies[index] = new EnemyController[quantity];
+            for (int i = 0; i < quantity; i++)
+            {
+                EnemyController enemy = Instantiate(enemyInfo.prefab, transform);
+                enemy.name = $"{enemyInfo.name} [{i}]";
+                enemy.Initialize(enemyInfo);
+                enemies[index][i] = enemy;
+            }
+        }
+
+        public void InitOne()
+        {
+            Init(EnemyType.Type1, 100);
         }
 
         public void SpawnOne()
         {
-            Spawn(0, 10);
+            Spawn(EnemyType.Type1, 10);
         }
 
         // Spawns some enemies of a given definition
-        public void Spawn(int definitionIndex, int quantity)
+        public void Spawn(EnemyType type, int quantity)
         {
-            if (definitionIndex >= definitions.Length)
-            {
-                return;
-            }
-
+            int enemyIndex = enemyCollection.GetIndex(type);
             int remaining = quantity;
             int index = 0;
-            var definitionEnemies = enemies[definitionIndex];
+            var enemies = this.enemies[enemyIndex];
             Vector3 position = playerTransform.position + (Vector3)GetRandomPosition(4);
-            while (remaining > 0 && index < definitionEnemies.Length)
+            while (remaining > 0 && index < enemies.Length)
             {
-                var enemy = definitionEnemies[index];
+                var enemy = enemies[index];
                 if (!enemy.IsActive)
                 {
                     enemy.transform.position = position + new Vector3((float)random.NextDouble() * 1f, (float)random.NextDouble() * 1f, 0f);
@@ -100,7 +83,15 @@ namespace Germinator
                 }
             }
 
-            enemies = Array.Empty<Enemy[]>();
+            enemies = Array.Empty<EnemyController[]>();
+        }
+
+        private void ClearEnemyType(int index)
+        {
+            foreach (var enemy in enemies[index])
+            {
+                Destroy(enemy.gameObject);
+            }
         }
 
         private Vector2 GetRandomPosition(float distance)
