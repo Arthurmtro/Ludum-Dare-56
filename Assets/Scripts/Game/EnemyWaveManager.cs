@@ -13,7 +13,7 @@ namespace Germinator
 
         [Header("Managers")]
         [SerializeField] private EnemyWaveCollection waveCollection;
-        [SerializeField] private EnemyManager enemyManager;
+        private EnemyManager enemyManager;
 
         // Number of ticks to avoid checking next steps
         [SerializeField][Range(10, 60)] private int sleepTicks = 10;
@@ -24,6 +24,7 @@ namespace Germinator
         [SerializeField][Range(10, 300)] private int minEnemies;
         [SerializeField][Range(50, 600)] private int maxEnemies;
         [SerializeField][Range(1, 2)] private float waveMultiplier;
+        [Header("Player information")][SerializeField] private Transform playerTransform;
 
         #endregion
 
@@ -70,10 +71,21 @@ namespace Germinator
             nextStepCandidate = 0;
             foreach (var quantity in quantities)
             {
-                enemyManager.Init(quantity.Type, quantity.Quantity);
+                enemyManager.InitEnemySpecies(quantity.Builder, quantity.Quantity);
             }
 
             isActive = true;
+        }
+
+        void Start()
+        {
+            if (!TryGetComponent<EnemyManager>(out enemyManager))
+            {
+                enemyManager = gameObject.AddComponent<EnemyManager>();
+                enemyManager.usedEnemiesTypes = 5;
+                enemyManager.playerTransform = playerTransform;
+                enemyManager.Init();
+            }
         }
 
         void Update()
@@ -111,12 +123,11 @@ namespace Germinator
             if (waveIndex < waveCollection.Count)
             {
                 return waveCollection.AtIndex(waveIndex);
-
             }
 
             float multiplier = (float)((waveIndex + 1) * waveMultiplier * random.NextDouble());
-            EnemyType[] types = { EnemyType.Type1 };
-            return EnemyWaveBuilder.Random(duration, (int)Math.Round(steps * multiplier), (int)Math.Round(minEnemies * multiplier), (int)Math.Round(maxEnemies * multiplier), types);
+            EnemyBuilder[] enemyBuilders = { };
+            return EnemyWaveBuilder.Random(duration, (int)Math.Round(steps * multiplier), (int)Math.Round(minEnemies * multiplier), (int)Math.Round(maxEnemies * multiplier), enemyBuilders);
         }
 
         private EnemyWaveStep? GetNextStep()
@@ -138,7 +149,7 @@ namespace Germinator
 
         private void StartWaveStep(EnemyWaveStep step)
         {
-            enemyManager.Spawn(step.Type, step.Quantity);
+            enemyManager.Spawn(step.Builder, step.Quantity);
         }
     }
 }

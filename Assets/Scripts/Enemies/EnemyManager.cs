@@ -8,59 +8,70 @@ namespace Germinator
     {
         #region Variables
 
-        [Header("Input")]
-        [SerializeField] private EnemyCollection enemyCollection;
-        [SerializeField] private Transform playerTransform;
+        // [Header("Input")]
+        // [SerializeField] private EnemyCollection enemyCollection;
+        public Transform playerTransform;
 
         private EnemyController[][] enemies = Array.Empty<EnemyController[]>();
+        public int usedEnemiesTypes;
+
         private int[] lastIndices = Array.Empty<int>();
         private readonly System.Random random = new();
 
         #endregion
 
-        void Start()
+        public void Init()
         {
-            enemies = new EnemyController[enemyCollection.Count][];
-            lastIndices = new int[enemyCollection.Count];
+            enemies = new EnemyController[usedEnemiesTypes][];
+            lastIndices = new int[usedEnemiesTypes];
             for (int i = 0; i < enemies.Length; i++)
             {
                 enemies[i] = new EnemyController[0];
             }
         }
 
-        public void Init(EnemyType type, int quantity)
+        public void InitEnemySpecies(EnemyBuilder builder, int quantity)
         {
-            var enemyInfo = enemyCollection.ByType(type);
-            int index = enemyCollection.GetIndex(type);
-            ClearEnemyType(index);
+            // var enemyInfo = enemyCollection.ByType(builder);
+            // int index = enemyCollection.GetIndex(builder);
+            int index = builder.key;
+            ClearEnemyBuilder(index);
             enemies[index] = new EnemyController[quantity];
             for (int i = 0; i < quantity; i++)
             {
-                EnemyController enemy = Instantiate(enemyInfo.prefab, transform);
-                enemy.name = $"{enemyInfo.name} [{i}]";
-                enemy.Initialize(enemyInfo);
-                enemies[index][i] = enemy;
+                GameObject enemy = new();
+                EnemyController enemyController = enemy.AddComponent<EnemyController>();
+                enemyController.builder = builder;
+                enemy.transform.parent = transform;
+                Debug.Log($"Spawning enemy {enemy.name}");
+                builder.behaviour.OnSpawn(enemy);
+                // EnemyController enemy = Instantiate(gameObject.AddComponent<EnemyController>(), transform);
+
+                // EnemyController enemy = Instantiate(enemyInfo.prefab, transform);
+                enemy.name = $"{builder.name} [{i}]";
+                // enemy.Initialize(enemyInfo);
+                enemies[index][i] = enemyController;
             }
         }
 
         public void InitOne()
         {
-            Init(EnemyType.Type1, 100);
+            // Init(EnemyBuilder.Type1, 100);
         }
 
         public void SpawnOne()
         {
-            Spawn(EnemyType.Type1, 10);
+            // Spawn(EnemyBuilder.Type1, 10);
         }
 
         // Spawns some enemies of a given definition
-        public void Spawn(EnemyType type, int quantity)
+        public void Spawn(EnemyBuilder builder, int quantity)
         {
-            int enemyIndex = enemyCollection.GetIndex(type);
+            // int enemyIndex = enemyCollection.GetIndex(builder);
             int remaining = quantity;
-            int index = lastIndices[enemyIndex];
+            int index = lastIndices[builder.key];
             int attempts = 0;
-            var enemies = this.enemies[enemyIndex];
+            var enemies = this.enemies[builder.key];
             Vector3 position = playerTransform.position + (Vector3)GetRandomPosition(4);
             while (remaining > 0 && attempts < enemies.Length)
             {
@@ -77,7 +88,7 @@ namespace Germinator
                 attempts++;
             }
 
-            lastIndices[enemyIndex] = index;
+            lastIndices[builder.key] = index;
         }
 
         public void Clear()
@@ -90,14 +101,14 @@ namespace Germinator
                 }
             }
 
-            enemies = new EnemyController[enemyCollection.Count][];
+            enemies = new EnemyController[usedEnemiesTypes][];
             for (int i = 0; i < enemies.Length; i++)
             {
                 enemies[i] = new EnemyController[0];
             }
         }
 
-        private void ClearEnemyType(int index)
+        private void ClearEnemyBuilder(int index)
         {
             foreach (var enemy in enemies[index])
             {
@@ -121,10 +132,10 @@ namespace Germinator
                 foreach (var enemy in definitionEnemies)
                 {
                     // Check if active
-                    if (enemy.IsActive)
-                    {
-                        enemy.MoveTowards(playerTransform.position);
-                    }
+                    // if (enemy.IsActive)
+                    // {
+                    // enemy.MoveTowards(playerTransform.position);
+                    // }
                 }
             }
         }

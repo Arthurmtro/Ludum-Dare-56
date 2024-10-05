@@ -17,8 +17,11 @@ namespace Germinator
             Weapon
         }
 
+        public int key;
+
         public EnemyEntity.Data data;
 
+        [SerializeReference]
         public EnemySpecie behaviour;
 
         #region Sprite Layers

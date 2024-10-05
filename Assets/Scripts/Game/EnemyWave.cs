@@ -6,32 +6,32 @@ using UnityEngine;
 
 namespace Germinator
 {
-    public readonly struct EnemyTypeQuantity
+    public readonly struct EnemyBuilderQuantity
     {
-        public EnemyTypeQuantity(EnemyType type, int quantity)
+        public EnemyBuilderQuantity(EnemyBuilder builder, int quantity)
         {
-            Type = type;
+            Builder = builder;
             Quantity = quantity;
         }
 
-        public EnemyType Type { get; }
+        public EnemyBuilder Builder { get; }
         public int Quantity { get; }
     }
 
     [Serializable]
     public struct EnemyWaveStep
     {
-        public EnemyWaveStep(float time, EnemyType type, int quantity)
+        public EnemyWaveStep(float time, EnemyBuilder builder, int quantity)
         {
             Time = time;
-            Type = type;
+            Builder = builder;
             Quantity = quantity;
         }
 
         // Time when the step should be triggered
         public float Time;
         // Type of enemy to spawn
-        public EnemyType Type;
+        public EnemyBuilder Builder;
         // Quantity of enemies to spawn
         public int Quantity;
     }
@@ -50,14 +50,14 @@ namespace Germinator
         // Steps of the wave
         public EnemyWaveStep[] Steps;
 
-        public readonly EnemyTypeQuantity[] GetQuantities()
+        public readonly EnemyBuilderQuantity[] GetQuantities()
         {
-            List<EnemyTypeQuantity> result = new();
+            List<EnemyBuilderQuantity> result = new();
             foreach (var step in Steps)
             {
                 if (step.Quantity > 0)
                 {
-                    result.Add(new EnemyTypeQuantity(step.Type, step.Quantity));
+                    result.Add(new EnemyBuilderQuantity(step.Builder, step.Quantity));
                 }
             }
 
@@ -76,9 +76,9 @@ namespace Germinator
             return this;
         }
 
-        public EnemyWaveBuilder AddStep(float time, EnemyType type, int quantity)
+        public EnemyWaveBuilder AddStep(float time, EnemyBuilder builder, int quantity)
         {
-            steps.Add(new EnemyWaveStep(time, type, quantity));
+            steps.Add(new EnemyWaveStep(time, builder, quantity));
             return this;
         }
 
@@ -87,25 +87,25 @@ namespace Germinator
             return new EnemyWave(duration, steps.ToArray());
         }
 
-        public static EnemyWave Random(float duration, int steps, int minEnemies, int maxEnemies, EnemyType[] types)
+        public static EnemyWave Random(float duration, int steps, int minEnemies, int maxEnemies, EnemyBuilder[] builders)
         {
-            EnemyWaveBuilder builder = new EnemyWaveBuilder().SetDuration(duration);
+            EnemyWaveBuilder waveBuilder = new EnemyWaveBuilder().SetDuration(duration);
             System.Random random = new System.Random();
             float maxTime = 0.8f * duration;
             float stepDuration = maxTime / steps;
             for (int i = 0; i < steps; i++)
             {
                 float time = Math.Max(0.1f, (float)(i * stepDuration));
-                EnemyType type = types[random.Next(0, types.Length - 1)];
+                EnemyBuilder builder = builders[random.Next(0, builders.Length - 1)];
                 int quantity = (int)Math.Round(Mathf.Lerp(minEnemies, maxEnemies, (float)i / steps));
 
-                builder.AddStep(time, type, quantity);
+                waveBuilder.AddStep(time, builder, quantity);
             }
 
-            return builder.Build();
+            return waveBuilder.Build();
         }
 
-        internal static void Random(float duration, float v1, double v2, float v3, EnemyType[] enemyTypes)
+        internal static void Random(float duration, float v1, double v2, float v3, EnemyBuilder[] enemyBuilders)
         {
             throw new NotImplementedException();
         }

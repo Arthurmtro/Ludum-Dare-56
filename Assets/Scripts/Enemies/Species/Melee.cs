@@ -10,7 +10,6 @@ namespace Germinator
         private Transform weapon;
         private Transform body;
 
-
         public Melee() { }
 
         public Melee(Transform weapon, Transform body)
@@ -19,9 +18,12 @@ namespace Germinator
             this.body = body;
         }
 
-        public override void OnSpawn()
+        public override void OnSpawn(GameObject parent)
         {
-
+            GameObject spriteObject = new GameObject(body.ToString());
+            spriteObject.transform.parent = parent.transform;
+            spriteObject.transform.localPosition = Vector3.zero;
+            spriteObject.AddComponent<SpriteRenderer>();
         }
 
         public override void OnAttack(GameObject target)
@@ -42,7 +44,6 @@ namespace Germinator
 
         public override void OnMove()
         {
-
         }
 
         public override void OnDeath()
