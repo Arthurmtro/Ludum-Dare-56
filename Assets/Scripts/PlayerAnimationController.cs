@@ -60,11 +60,6 @@ namespace Germinator
             EyesTracking();
             ArmsTracking();
             LegsSwinging();
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                StartCoroutine(Punch());
-            }
         }
 
         private void BodyTracking()

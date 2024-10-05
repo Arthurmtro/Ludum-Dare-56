@@ -15,6 +15,9 @@ namespace Germinator
         [SerializeField]
         private BoxCollider2D visionCollider;
 
+        [SerializeField]
+        private AudioSource punchAudioSource;
+
         private PlayerAnimationController animationController;
 
         void Start()
@@ -46,7 +49,7 @@ namespace Germinator
             UpdateClosestEnemy();
             RotateVisionConeTowardsClosestEnemy();
 
-            if (canAttack && Input.GetMouseButtonDown(0))
+            if (canAttack && closestEnemy != null)
             {
                 StartCoroutine(HandleAttack());
             }
@@ -96,19 +99,32 @@ namespace Germinator
                 Entity targetEntity = target.GetComponent<Entity>();
                 if (targetEntity != null && targetEntity.Type != entity.Type)
                 {
+                    Debug.Log("Punch : " + target.gameObject.name);
                     Attack(targetEntity);
                 }
             }
 
-            yield return new WaitForSeconds(0.5f); // Adjust the delay as needed
+            punchAudioSource.Play();
+            Debug.Log("Punch Animation ");
+            StartCoroutine(animationController.Punch());
+
+            yield return new WaitForSeconds(entity.AttackSpeed);
             canAttack = true;
+        }
+
+        private void OnTriggerStay2D(Collider2D collider)
+        {
+            if (canAttack)
+            {
+                StartCoroutine(HandleAttack());
+            }
         }
 
         public void Attack(Entity targetEntity)
         {
             if (targetEntity != null)
             {
-                targetEntity.OnTakeDamage(entity.AttackSpeed);
+                targetEntity.OnTakeDamage(entity.AttackDamage);
             }
         }
     }
