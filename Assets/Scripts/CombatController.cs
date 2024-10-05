@@ -49,7 +49,7 @@ namespace Germinator
 
         private void UpdateColliderSizes()
         {
-            float attackRange = entity.AttackRange;
+            float attackRange = entity.data.attack.range;
             detectionCollider.radius = attackRange;
             visionCollider.size = new Vector2(attackRange, attackRange);
         }
@@ -91,7 +91,7 @@ namespace Germinator
         private void OnTriggerEnter2D(Collider2D collider)
         {
             Entity targetEntity = collider.GetComponent<Entity>();
-            if (targetEntity != null && targetEntity.Type != entity.Type)
+            if (targetEntity != null && targetEntity.type != entity.type)
             {
                 enemiesInRange.Add(targetEntity);
             }
@@ -128,7 +128,7 @@ namespace Germinator
             foreach (Collider2D target in targetsInVision)
             {
                 Entity targetEntity = target.GetComponent<Entity>();
-                if (targetEntity != null && targetEntity.Type != entity.Type)
+                if (targetEntity != null && targetEntity.type != entity.type)
                 {
                     Debug.Log("Punch : " + target.gameObject.name);
                     // Attack(targetEntity);
@@ -139,13 +139,13 @@ namespace Germinator
             Debug.Log("Punch Animation");
             StartCoroutine(animationController.Punch());
 
-            yield return new WaitForSeconds(entity.AttackSpeed);
+            yield return new WaitForSeconds(entity.data.attack.speed);
             canAttack = true;
         }
 
         private void Attack(Entity targetEntity)
         {
-            targetEntity?.OnTakeDamage(entity.AttackDamage);
+            targetEntity?.OnTakeDamage(entity.data.attack.damage);
         }
     }
 }

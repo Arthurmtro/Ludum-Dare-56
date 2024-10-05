@@ -27,7 +27,7 @@ namespace Germinator
         {
             if (rigidBody != null && playerEntity != null)
             {
-                rigidBody.velocity = playerEntity.MoveSpeed * Time.deltaTime * movementDirection;
+                rigidBody.velocity = playerEntity.data.moveSpeed * Time.deltaTime * movementDirection;
             }
         }
     }

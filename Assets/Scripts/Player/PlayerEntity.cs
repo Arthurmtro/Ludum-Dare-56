@@ -6,9 +6,8 @@ namespace Germinator
 {
     public class PlayerEntity : Entity
     {
-        PlayerEntity()
+        PlayerEntity() : base(EntityType.Player)
         {
-            type = EntityType.Player;
         }
     }
 }

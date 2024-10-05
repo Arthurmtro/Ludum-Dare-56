@@ -1,17 +1,25 @@
+using UnityEditor;
 using UnityEngine;
 
 namespace Germinator
 {
-    public abstract class EnemyBuilder : MonoBehaviour
+    [InitializeOnLoad]
+    [CreateAssetMenu(menuName = "Germinator/EnemyBuilder")]
+    public class EnemyBuilder : ScriptableObject
     {
+        static EnemyBuilder()
+        {
+        }
+
         public enum BodyPart
         {
             Body,
             Weapon
         }
 
-        public EnemyEntity entity;
+        public EnemyEntity.Data data;
 
+        // public EnemySpecie 
 
         #region Sprite Layers
         [SerializeField]
@@ -20,7 +28,6 @@ namespace Germinator
 
         [SerializeField]
         private Texture2D weapon;
-
         #endregion
     }
 }
