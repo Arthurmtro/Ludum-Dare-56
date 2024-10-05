@@ -40,7 +40,6 @@ namespace Germinator
                     if (GUILayout.Button("Add Specie"))
                     {
                         Type selectedType = specieTypes[selectedSpecieIndex];
-                        builder.behaviour = (EnemySpecie)CreateInstance(selectedType);
 
                         // Mark the object as dirty so Unity saves the change
                         EditorUtility.SetDirty(builder);

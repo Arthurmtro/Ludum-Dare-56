@@ -27,10 +27,10 @@ namespace Germinator
         #region Sprite Layers
         [SerializeField]
         [Header("Sprite Layers")]
-        private Texture2D body;
+        public Texture2D body;
 
         [SerializeField]
-        private Texture2D weapon;
+        public Texture2D weapon;
         #endregion
     }
 }

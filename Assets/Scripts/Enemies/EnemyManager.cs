@@ -39,13 +39,18 @@ namespace Germinator
             enemies[index] = new EnemyController[quantity];
             for (int i = 0; i < quantity; i++)
             {
-                GameObject enemy = new();
+                // GameObject enemy = new();
+                // enemyController.builder = builder;
+                // enemy.transform.parent = transform;
+                // Debug.Log($"Spawning enemy {enemy.name}");
+                // builder.behaviour.OnSpawn(enemy);
+                GameObject enemy = Instantiate(builder.behaviour.gameObject, transform);
+                EnemySpecie enemySpecie = enemy.GetComponent<EnemySpecie>();
+                enemySpecie.builder = builder;
                 EnemyController enemyController = enemy.AddComponent<EnemyController>();
                 enemyController.builder = builder;
-                enemy.transform.parent = transform;
-                Debug.Log($"Spawning enemy {enemy.name}");
-                builder.behaviour.OnSpawn(enemy);
-                // EnemyController enemy = Instantiate(gameObject.AddComponent<EnemyController>(), transform);
+                enemyController.specie = enemySpecie;
+                enemySpecie.OnSpawn(enemy);
 
                 // EnemyController enemy = Instantiate(enemyInfo.prefab, transform);
                 enemy.name = $"{builder.name} [{i}]";
@@ -132,10 +137,10 @@ namespace Germinator
                 foreach (var enemy in definitionEnemies)
                 {
                     // Check if active
-                    // if (enemy.IsActive)
-                    // {
-                    // enemy.MoveTowards(playerTransform.position);
-                    // }
+                    if (enemy.IsActive)
+                    {
+                        enemy.MoveTowards(playerTransform.position);
+                    }
                 }
             }
         }

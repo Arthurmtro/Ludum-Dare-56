@@ -10,9 +10,10 @@ namespace Germinator
         private Rigidbody2D rigidBody;
         // private float speed = 1.0f;
         private float randomSpeedMultiplier;
-        private readonly System.Random random;
+        private readonly System.Random random = new();
 
         public EnemyBuilder builder;
+        public EnemySpecie specie;
 
         #endregion
 
@@ -23,17 +24,10 @@ namespace Germinator
         #endregion
 
 
-        public EnemyController()
-        {
-            // this.builder = builder;
-            random = new();
-
-
-        }
-
         void Start()
         {
             rigidBody = GetComponent<Rigidbody2D>();
+            rigidBody.gravityScale = 0;
             // randomSpeedMultiplier = 1 + (float)random.NextDouble();
             randomSpeedMultiplier = 1;
         }
@@ -47,8 +41,19 @@ namespace Germinator
         {
             var direction = position - transform.position;
 
-            // rigidBody.velocity = randomSpeedMultiplier * speed * direction.normalized;
-            transform.position += randomSpeedMultiplier * builder.data.moveSpeed * Time.deltaTime * direction.normalized;
+            // Far away, move to player
+            if (direction.magnitude > 2)
+            {
+                transform.position += randomSpeedMultiplier * builder.data.moveSpeed * Time.deltaTime * direction.normalized;
+                specie.OnMove();
+                specie.OnTick();
+                // rigidBody.velocity = randomSpeedMultiplier * speed * direction.normalized;
+                return;
+            }
+
+            // Attack
+            specie.OnAttack(transform.gameObject);
+            specie.OnTick();
         }
 
         void OnTriggerEnter2D(Collider2D collider)
