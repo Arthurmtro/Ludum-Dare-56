@@ -19,7 +19,7 @@ namespace Germinator
 
         public EnemyEntity.Data data;
 
-        // public EnemySpecie 
+        public EnemySpecie behaviour;
 
         #region Sprite Layers
         [SerializeField]
