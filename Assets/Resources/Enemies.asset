@@ -15,6 +15,6 @@ MonoBehaviour:
   enemies:
   - type: 1
     name: Enemy 1
-    prefab: {fileID: 1544943591028249204, guid: 8884d461b0e404688b14925255f841c0, type: 3}
+    prefab: {fileID: 4995615200111717978, guid: 0d29c41ffd1864e769f20379e2beec1c, type: 3}
     hp: 10
     speed: 4
