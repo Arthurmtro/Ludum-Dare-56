@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f6ea3a019c8c4034ab3488533dc2fbd, type: 3}
   m_Name: MeleeSmall
   m_EditorClassIdentifier: 
+  name: 
+  behaviour: {fileID: 0}
   data:
     maxHealth: 100
     health: 100
