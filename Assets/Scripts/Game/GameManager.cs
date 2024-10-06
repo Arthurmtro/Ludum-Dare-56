@@ -21,6 +21,7 @@ namespace Germinator
         [SerializeField] private EffectsManager effectManager;
         [SerializeField] private CameraFollow cameraFollow;
         [SerializeField] private PlayerController player;
+        [SerializeField] private GameUI gameUI;
 
         #region Score
 
@@ -41,6 +42,7 @@ namespace Germinator
         {
             waveManager.onWaveFinish.AddListener(OnWaveFinish);
             player.onKill.AddListener(OnPlayerKills);
+            player.onHit.AddListener(OnPlayerHit);
             player.onDie.AddListener(OnPlayerDie);
         }
 
@@ -73,6 +75,7 @@ namespace Germinator
             waveManager.InitWave();
             waveManager.SetActive(true);
             player.entity.IsActive = true;
+            gameUI.UpdatePlayer(player.entity);
         }
 
         public void OnPausePress()
@@ -145,6 +148,11 @@ namespace Germinator
             }
 
             Debug.Log($"{kills} kills - {score}");
+        }
+
+        public void OnPlayerHit()
+        {
+            gameUI.UpdatePlayer(player.entity);
         }
 
         public void OnPlayerDie()

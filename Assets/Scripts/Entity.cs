@@ -11,11 +11,13 @@ namespace Germinator
     {
         #region
 
+        public UnityEvent onHit = new();
         public UnityEvent onKill = new();
 
         #endregion
 
         public bool IsActive { get; set; }
+        private float lastHitTime = 0f;
 
         public enum EntityType
         {
@@ -56,6 +58,11 @@ namespace Germinator
         // Returns whether the entity died
         public bool OnTakeDamage(float damage)
         {
+            if (Time.time - lastHitTime < data.invincibilityTime)
+            {
+                return false;
+            }
+
             data.health -= damage;
 
             OnHit();
@@ -65,6 +72,8 @@ namespace Germinator
                 OnDie();
                 return true;
             }
+
+            lastHitTime = Time.time;
 
             return false;
         }
