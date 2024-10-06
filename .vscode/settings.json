@@ -60,7 +60,7 @@
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "ms-dotnettools.csharp"
     },
-    "dotnet.defaultSolution": "Ludum-Dare-56.sln",
+    "dotnet.defaultSolution": "Germinator.sln",
     "dotnet.codeLens.enableReferencesCodeLens": false,
     "cSpell.words": ["Behaviour","Lerp","Mathf","Rigidbody"]
 }
