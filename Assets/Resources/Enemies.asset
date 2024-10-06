@@ -15,11 +15,11 @@ MonoBehaviour:
   enemies:
   - type: 1
     name: Enemy 1
-    prefab: {fileID: 4995615200111717978, guid: 0d29c41ffd1864e769f20379e2beec1c, type: 3}
+    prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
     hp: 10
     speed: 4
   - type: 1
     name: Enemy 1
-    prefab: {fileID: 0}
+    prefab: {fileID: 6522064493243914530, guid: 1e31602d1bdc34c0cb81be37a54ee232, type: 3}
     hp: 10
     speed: 4

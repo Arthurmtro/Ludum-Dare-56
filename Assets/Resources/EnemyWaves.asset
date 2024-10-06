@@ -16,8 +16,8 @@ MonoBehaviour:
   - Duration: 60
     Steps:
     - Time: 3
-      Prefab: {fileID: 1385611694690061846, guid: b22f7bc4e032c41ba9c4122378393918, type: 3}
+      Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
       Quantity: 1
     - Time: 10
-      Prefab: {fileID: 1385611694690061846, guid: b22f7bc4e032c41ba9c4122378393918, type: 3}
+      Prefab: {fileID: 6522064493243914530, guid: 1e31602d1bdc34c0cb81be37a54ee232, type: 3}
       Quantity: 10
