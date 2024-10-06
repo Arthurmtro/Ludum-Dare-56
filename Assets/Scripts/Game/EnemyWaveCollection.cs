@@ -4,7 +4,9 @@ using UnityEngine;
 
 namespace Germinator
 {
+#if UNITY_EDITOR
     [InitializeOnLoad]
+#endif
     [CreateAssetMenu(fileName = "Assets/Resources/EnemyWaveCollection.asset", menuName = "Germinator/EnemyWaveCollection")]
     public class EnemyWaveCollection : ScriptableObject
     {
