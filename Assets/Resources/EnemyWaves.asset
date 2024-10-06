@@ -19,14 +19,14 @@ MonoBehaviour:
       Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
       Quantity: 1
     - Time: 4
-      Prefab: {fileID: 6522064493243914530, guid: 1e31602d1bdc34c0cb81be37a54ee232, type: 3}
+      Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
       Quantity: 20
     - Time: 10
       Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
       Quantity: 10
-    - Time: 15
-      Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
-      Quantity: 10
     - Time: 20
       Prefab: {fileID: 6522064493243914530, guid: 1e31602d1bdc34c0cb81be37a54ee232, type: 3}
-      Quantity: 20
+      Quantity: 1
+    - Time: 20
+      Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
+      Quantity: 10
