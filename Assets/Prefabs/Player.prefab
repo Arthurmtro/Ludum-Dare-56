@@ -245,7 +245,7 @@ Transform:
   m_GameObject: {fileID: 1650743741126350083}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.75, y: 1.43, z: 0}
+  m_LocalPosition: {x: -0.7300001, y: 1.43, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -328,7 +328,7 @@ Transform:
   m_GameObject: {fileID: 2770490173666583539}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1.13, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -362,7 +362,7 @@ Transform:
   m_GameObject: {fileID: 2792696132455724200}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.64074063, w: 0.7677574}
-  m_LocalPosition: {x: -4.28, y: -3.54, z: 0}
+  m_LocalPosition: {x: -4.57, y: -3.21, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -408,7 +408,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 6
   m_Sprite: {fileID: 21300000, guid: c5dcae2e7cf434831866c2ff91a08462, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -526,7 +526,7 @@ Transform:
   m_GameObject: {fileID: 3671453616735531868}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.36, y: -5.98, z: 0}
+  m_LocalPosition: {x: 1.38, y: -5.98, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -687,7 +687,7 @@ Transform:
   m_GameObject: {fileID: 4347389475666250470}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.4, y: 1, z: 0}
+  m_LocalPosition: {x: 1.42, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -771,7 +771,7 @@ Transform:
   m_GameObject: {fileID: 5434167331007617410}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.43, y: -5.94, z: 0}
+  m_LocalPosition: {x: -1.4100001, y: -5.94, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -844,6 +844,7 @@ GameObject:
   - component: {fileID: 8966823019495637210}
   - component: {fileID: 7261121396300375600}
   - component: {fileID: 2414030203753925844}
+  - component: {fileID: 3584031256252869923}
   m_Layer: 20
   m_Name: Player
   m_TagString: Player
@@ -1051,6 +1052,26 @@ MonoBehaviour:
   detectionCollider: {fileID: 2581559887208989995}
   visionCollider: {fileID: 4539380197455713147}
   weaponCollection: {fileID: 2770490173666583539}
+--- !u!114 &3584031256252869923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7983998795135777959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0b53830d6d3345759ef06f5c3183da4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eyesMaxMoveRange: 0.3
+  eyesMoveSpeed: 2
+  legSwingSpeed: 10
+  legSwingAngle: 10
+  bodyBobSpeed: 3
+  bodyBobAmount: 0.1
+  targetPosition: {x: 0, y: 0, z: 0}
+  bodyDirection: 1
 --- !u!1 &8697433801122455334
 GameObject:
   m_ObjectHideFlags: 0
