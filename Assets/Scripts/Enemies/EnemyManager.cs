@@ -8,9 +8,7 @@ namespace Germinator
     {
         #region Variables
 
-        // [Header("Input")]
-        // [SerializeField] private EnemyCollection enemyCollection;
-        public Transform playerTransform;
+        public GameObject playerGameObject;
 
         private EnemyController[][] enemies = Array.Empty<EnemyController[]>();
         public int usedEnemiesTypes;
@@ -55,6 +53,7 @@ namespace Germinator
                 CircleCollider2D circleCollider2D = enemy.AddComponent<CircleCollider2D>();
                 circleCollider2D.radius = 0.5f;
                 circleCollider2D.offset = new Vector2(-0.28f, -0.29f);
+                circleCollider2D.isTrigger = true;
 
                 EnemyEntity enemyEntity = enemy.AddComponent<EnemyEntity>();
                 enemyEntity.data = enemyController.builder.data;
@@ -86,7 +85,7 @@ namespace Germinator
             int index = lastIndices[builder.key];
             int attempts = 0;
             var enemies = this.enemies[builder.key];
-            Vector3 position = playerTransform.position + (Vector3)GetRandomPosition(4);
+            Vector3 position = playerGameObject.transform.position + (Vector3)GetRandomPosition(4);
             while (remaining > 0 && attempts < enemies.Length)
             {
                 index %= enemies.Length;
@@ -148,7 +147,7 @@ namespace Germinator
                     // Check if active
                     if (enemy.IsActive)
                     {
-                        enemy.MoveTowards(playerTransform.position);
+                        enemy.MoveTowards(playerGameObject);
                     }
                 }
             }

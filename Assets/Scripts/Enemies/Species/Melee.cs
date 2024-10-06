@@ -1,68 +1,52 @@
 using UnityEngine;
-using System;
 
 namespace Germinator
 {
 
-    [Serializable]
+    [System.Serializable]
     public class Melee : EnemySpecie
     {
         private GameObject body;
         private GameObject weapon;
-
         private bool isAttacking = false;
+        private bool attackCompleted = false;
+        private float attackRotationSpeed = 360f;
+        private float attackDuration = 0.5f;  // Example attack duration
+
+        private float attackTimer = 0f;
+
 
         public override void OnSpawn(GameObject parent)
         {
-            // Body
-            body = new();
-            body.name = "Body";
+            gameObject = parent;
+
+            // Body setup
+            body = new GameObject("Body");
             body.transform.parent = gameObject.transform;
             body.transform.localPosition = Vector3.zero;
             body.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
             SpriteRenderer bodyRenderer = body.AddComponent<SpriteRenderer>();
-            bodyRenderer.sprite = Sprite.Create(
-                builder.body,
-                new Rect(0, 0, builder.body.width, builder.body.height),
-                new Vector2(1f, 1f)
-            );
+            bodyRenderer.sprite = Sprite.Create(builder.body, new Rect(0, 0, builder.body.width, builder.body.height), new Vector2(1f, 1f));
             bodyRenderer.sortingOrder = 2;
 
-            // Weapon
-            weapon = new();
-            weapon.name = "Weapon";
+            // Weapon setup
+            weapon = new GameObject("Weapon");
             weapon.transform.parent = gameObject.transform;
             weapon.transform.localPosition = new Vector3(0.111f, 0.042f, 0f);
             weapon.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
 
             SpriteRenderer weaponRenderer = weapon.AddComponent<SpriteRenderer>();
-            weaponRenderer.sprite = Sprite.Create(
-                builder.weapon,
-                new Rect(0, 0, builder.weapon.width, builder.weapon.height),
-                new Vector2(1f, 1f)
-            );
+            weaponRenderer.sprite = Sprite.Create(builder.weapon, new Rect(0, 0, builder.weapon.width, builder.weapon.height), new Vector2(1f, 1f));
             weaponRenderer.sortingOrder = 1;
         }
 
-        public override void OnAttack(GameObject target)
+        public override void OnAttack()
         {
-            if (weapon == null)
-            {
-                return;
-            }
+            if (weapon == null) return;
 
             isAttacking = true;
-            // weapon.transform.rotation = Quaternion.Euler(0, 0, 0);
-
-            // float rotationSpeed = 100.0f;
-            // float rotationTarget = 360.0f;
-
-            // float rotation = 0.0f;
-            // while (rotation < rotationTarget)
-            // {
-            //     rotation += rotationSpeed * Time.deltaTime;
-            //     weapon.transform.rotation = Quaternion.Euler(0, 0, rotation);
-            // }
+            attackCompleted = false;
+            attackTimer = 0f;  // Reset attack timer
         }
 
         public override void OnMove()
@@ -72,24 +56,42 @@ namespace Germinator
 
         public override void OnDeath()
         {
-
+            // Handle death logic, such as animations or effects
         }
 
         public override void OnTick()
         {
             if (isAttacking)
             {
-                // float rotationSpeed = 100.0f;
-                // float rotationTarget = weapon.transform.rotation.z + Time.deltaTime;
+                RotateWeapon();
+                attackTimer += Time.deltaTime;
 
-                // // float rotation = 0.0f;
-                // while (rotation < rotationTarget)
-                // {
-                // rotation += rotationSpeed * Time.deltaTime;
-                // weapon.transform.rotation = Quaternion.Euler(0, 0, rotationTarget);
-                // }
+                if (attackTimer >= attackDuration)
+                {
+                    attackCompleted = true;
+                }
             }
         }
-    }
 
+        private void RotateWeapon()
+        {
+            if (weapon != null)
+            {
+                weapon.transform.Rotate(Vector3.forward * attackRotationSpeed * Time.deltaTime);
+            }
+        }
+
+        public override bool CompletedAttack()
+        {
+            return attackCompleted;
+        }
+
+        // public override void DealDamage(GameObject target)
+        // {
+        //     // Implement damage logic here
+        //     Debug.Log("Melee enemy dealt damage to " + target.name);
+        //     // You can call the player's damage function here
+        //     // target.GetComponent<Player>().TakeDamage(builder.data.attack.damage);
+        // }
+    }
 }

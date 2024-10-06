@@ -1,5 +1,5 @@
+using System.Collections;
 using UnityEngine;
-
 namespace Germinator
 {
     [RequireComponent(typeof(Rigidbody2D))]
@@ -8,18 +8,21 @@ namespace Germinator
         #region Variables
 
         private Rigidbody2D rigidBody;
-        // private float speed = 1.0f;
         private float randomSpeedMultiplier;
         private readonly System.Random random = new();
 
         public EnemyBuilder builder;
         public EnemySpecie specie;
 
+        private GameObject target;
+
         #endregion
 
         #region State
 
         public bool IsActive { get; set; }
+        private bool canAttack = true;
+        private bool isAttacking = false;
 
         #endregion
 
@@ -29,37 +32,69 @@ namespace Germinator
             rigidBody = GetComponent<Rigidbody2D>();
             rigidBody.gravityScale = 0;
             rigidBody.freezeRotation = true;
-            // randomSpeedMultiplier = 1 + (float)random.NextDouble();
-            randomSpeedMultiplier = 1;
+            randomSpeedMultiplier = 1 + (float)random.NextDouble();
+
+            specie.OnSpawn(gameObject);
         }
 
-        public void Initialize(EnemyInfo info)
+        public void Initialize(GameObject target)
         {
-            // speed = info.speed;
+            this.target = target;
         }
 
-        public void MoveTowards(Vector3 position)
+        void Update()
         {
-            var direction = (Vector2)(position - transform.position);
+            if (!IsActive || target == null) return;
 
-            // Far away, move to player
-            if (direction.magnitude > 1)
+            MoveTowards(target);
+
+            if (isAttacking && specie.CompletedAttack())
+            {
+                FinishAttack();
+            }
+        }
+
+        public void MoveTowards(GameObject target)
+        {
+            specie.OnTick();
+
+            var direction = (Vector2)(target.transform.position - transform.position);
+
+            if (direction.magnitude > builder.data.attack.range)
             {
                 rigidBody.MovePosition(rigidBody.position + (randomSpeedMultiplier * builder.data.moveSpeed * Time.deltaTime * direction.normalized));
                 specie.OnMove();
-                specie.OnTick();
-                // rigidBody.velocity = randomSpeedMultiplier * speed * direction.normalized;
                 return;
             }
 
-            // Attack
-            specie.OnAttack(transform.gameObject);
-            specie.OnTick();
+            if (canAttack)
+            {
+                Attack();
+            }
         }
 
-        // void OnTriggerEnter2D(Collider2D collider)
-        // {
-        //     IsActive = false;
-        // }
+        private void Attack()
+        {
+            isAttacking = true;
+            canAttack = false;
+
+            specie.OnAttack();
+        }
+
+        private void FinishAttack()
+        {
+            isAttacking = false;
+
+            // Delegate damage handling to the specie
+            // specie.DealDamage(target);
+
+            StartCoroutine(AttackCooldown());
+        }
+
+        private IEnumerator AttackCooldown()
+        {
+            yield return new WaitForSeconds(builder.data.attack.cooldown);
+            canAttack = true;
+        }
     }
 }

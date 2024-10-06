@@ -20,6 +20,7 @@ namespace Germinator
             public float speed;
             public float damage;
             public float range;
+            public float cooldown;
         }
 
         [Serializable]
@@ -53,7 +54,6 @@ namespace Germinator
 
         public void OnDie()
         {
-            Destroy(gameObject);
         }
     }
 }

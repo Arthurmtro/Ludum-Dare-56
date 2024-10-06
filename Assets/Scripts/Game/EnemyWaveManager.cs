@@ -24,7 +24,8 @@ namespace Germinator
         [SerializeField][Range(10, 300)] private int minEnemies;
         [SerializeField][Range(50, 600)] private int maxEnemies;
         [SerializeField][Range(1, 2)] private float waveMultiplier;
-        [Header("Player information")][SerializeField] private Transform playerTransform;
+
+        [Header("Player information")][SerializeField] private GameObject player;
 
         #endregion
 
@@ -83,8 +84,17 @@ namespace Germinator
             {
                 enemyManager = gameObject.AddComponent<EnemyManager>();
                 enemyManager.usedEnemiesTypes = 5;
-                enemyManager.playerTransform = playerTransform;
+                enemyManager.playerGameObject = player;
                 enemyManager.Init();
+            }
+
+            if (player == null)
+            {
+                player = GameObject.FindGameObjectWithTag("Player");
+                if (player == null)
+                {
+                    Debug.LogError("Player not found");
+                }
             }
         }
 
