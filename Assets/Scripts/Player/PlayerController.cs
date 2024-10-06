@@ -9,7 +9,10 @@ namespace Germinator
         public Rigidbody2D rigidBody;
         private Vector2 movementDirection;
 
+        [HideInInspector]
         public PlayerEntity entity;
+        [HideInInspector]
+        public bool isMoving = false;
 
         #region events
 
@@ -21,7 +24,6 @@ namespace Germinator
 
         private Entity.Data defaultValues = new Entity.Data();
 
-        public bool isMoving = false;
 
         void Awake()
         {
