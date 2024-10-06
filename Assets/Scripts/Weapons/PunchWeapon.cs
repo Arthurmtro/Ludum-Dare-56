@@ -14,9 +14,12 @@ namespace Germinator
         [SerializeField]
         private float punchSpeed = 5f;
 
+        [SerializeField]
+        private CombatController combatController;
+
+
         private Vector3 leftOriginalPosition;
         private Vector3 rightOriginalPosition;
-        private Transform currentPunchTransform;
         private bool isLeftPunch = true;
         private bool isPunching = false;
 
@@ -33,6 +36,20 @@ namespace Germinator
             rightPunchTransform.GetComponent<SpriteRenderer>().sortingOrder = playerAnimationController.bodyDirection == 1 ? 2 : 6;
         }
 
+        private void OnTriggerEnter2D(Collider2D collider)
+        {
+            if (collider.CompareTag("Enemy") && isPunching)
+            {
+                Debug.Log("Attacking : " + collider.gameObject.name);
+
+                Entity targetEntity = collider.GetComponent<Entity>();
+                if (targetEntity != null && combatController != null)
+                {
+                    combatController.Attack(targetEntity);
+                }
+            }
+        }
+
         public override IEnumerator Attack(Entity target)
         {
             if (isPunching)
@@ -42,7 +59,7 @@ namespace Germinator
 
             Vector3 lockedTargetPosition = target.GetComponent<Collider2D>().bounds.center;
 
-            currentPunchTransform = isLeftPunch ? leftPunchTransform : rightPunchTransform;
+            Transform currentPunchTransform = isLeftPunch ? leftPunchTransform : rightPunchTransform;
             Vector3 originalPosition = isLeftPunch ? leftOriginalPosition : rightOriginalPosition;
 
             Vector3 direction = (lockedTargetPosition - currentPunchTransform.position).normalized;
