@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Germinator
@@ -122,6 +124,10 @@ namespace Germinator
             effectManager.StartWaveParticles();
             waveManager.SetActive(false);
             player.entity.IsActive = false;
+
+            int newHp = (int)Math.Round(Math.Min(player.entity.data.maxHealth, player.entity.data.maxHealth * 1.1f));
+            player.entity.data.health = newHp;
+            gameUI.UpdatePlayer(player.entity);
         }
 
         public void OnSelectMod1()
@@ -131,12 +137,12 @@ namespace Germinator
         }
         public void OnSelectMod2()
         {
-            player.OnAttackSpeedModifier();
+            player.OnAttackDamageModifier();
             OnSelectMod(1);
         }
         public void OnSelectMod3()
         {
-            player.OnAttackDamageModifier();
+            player.OnAttackSpeedModifier();
             OnSelectMod(2);
         }
 

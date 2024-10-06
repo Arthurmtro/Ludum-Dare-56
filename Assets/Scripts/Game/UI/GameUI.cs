@@ -10,6 +10,9 @@ public class GameUI : MonoBehaviour
     [SerializeField] private TMP_Text textScore;
     [SerializeField] private TMP_Text textCombo;
     [SerializeField] private string[] comboLevelTexts;
+    [SerializeField] private TMP_Text textSpeed;
+    [SerializeField] private TMP_Text textAtkDamage;
+    [SerializeField] private TMP_Text textAtkSpeed;
     private Animator animator;
 
     private string ComboLevelText(int level)
@@ -37,6 +40,9 @@ public class GameUI : MonoBehaviour
 
         hpBar.offsetMax = new Vector2(-hpPerc * 350f, 0f);
         animator.SetTrigger("Hit");
+        textSpeed.text = player.data.moveSpeed.ToString();
+        textAtkDamage.text = player.data.attack.damage.ToString();
+        textAtkSpeed.text = player.data.attack.speed.ToString();
     }
 
     public void UpdateScore(int kills, int score)

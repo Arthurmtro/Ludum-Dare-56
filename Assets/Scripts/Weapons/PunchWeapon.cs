@@ -40,8 +40,6 @@ namespace Germinator
         {
             if (collider.CompareTag("Enemy") && isPunching)
             {
-                Debug.Log("Attacking : " + collider.gameObject.name);
-
                 Entity targetEntity = collider.GetComponent<Entity>();
                 if (targetEntity != null && combatController != null)
                 {
