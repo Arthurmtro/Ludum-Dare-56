@@ -189,7 +189,7 @@ MonoBehaviour:
       speed: 2
       damage: 3
       range: 1.5
-      cooldown: 0.1
+      baseCooldown: 2
   key: 1
 --- !u!1 &3967053090529497268
 GameObject:
