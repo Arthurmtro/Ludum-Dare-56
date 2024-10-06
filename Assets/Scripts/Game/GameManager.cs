@@ -18,6 +18,7 @@ namespace Germinator
         [SerializeField] private EnemyWaveManager waveManager;
         [SerializeField] private EffectsManager effectManager;
         [SerializeField] private CameraFollow cameraFollow;
+        [SerializeField] private PlayerController playerController;
 
         #region  Events
 
@@ -73,14 +74,20 @@ namespace Germinator
 
         public void OnSelectMod1()
         {
+            Debug.Log("Select Modifier 1");
+            playerController.OnSpeedModifier();
             OnSelectMod(0);
         }
         public void OnSelectMod2()
         {
+            Debug.Log("Select Modifier 2");
+            playerController.OnAttackSpeedModifier();
             OnSelectMod(1);
         }
         public void OnSelectMod3()
         {
+            Debug.Log("Select Modifier 3");
+            playerController.OnAttackDamageModifier();
             OnSelectMod(2);
         }
 
