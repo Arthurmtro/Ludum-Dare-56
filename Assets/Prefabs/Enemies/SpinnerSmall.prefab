@@ -177,7 +177,7 @@ MonoBehaviour:
     index: 0
     maxHealth: 10
     health: 10
-    moveSpeed: 3
+    moveSpeed: 6
     invincibilityTime: 2
     attack:
       speed: 2

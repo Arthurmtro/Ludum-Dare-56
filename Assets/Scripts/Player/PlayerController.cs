@@ -22,7 +22,7 @@ namespace Germinator
 
         public bool isMoving = false;
 
-        void Start()
+        void Awake()
         {
             entity = GetComponent<PlayerEntity>();
             defaultValues = entity.data;
