@@ -898,13 +898,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   data:
+    index: 0
     maxHealth: 100
     health: 100
-    moveSpeed: 80
+    moveSpeed: 150
+    invincibilityTime: 0
     attack:
       speed: 1
       damage: 5
       range: 1.5
+      cooldown: 0
 --- !u!114 &2414030203753925844
 MonoBehaviour:
   m_ObjectHideFlags: 0

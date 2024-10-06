@@ -7,7 +7,7 @@ namespace Germinator
     public abstract class EnemySpecie : MonoBehaviour
     {
         protected new GameObject gameObject;
-        public EnemyBuilder builder;
+        // public EnemyBuilder builder;
 
         public abstract void OnSpawn(GameObject parent);
         public abstract void OnAttack();

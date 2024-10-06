@@ -12,7 +12,7 @@ namespace Germinator
         {
         }
 
-        public new void OnDie()
+        public override void OnDie()
         {
             if (TryGetComponent<EnemyController>(out var controller))
             {

@@ -28,11 +28,11 @@ namespace Germinator
             }
         }
 
-        public void InitEnemySpecies(EnemyBuilder builder, int quantity)
+        public void InitEnemySpecies(EnemyController prefab, int quantity)
         {
             // var enemyInfo = enemyCollection.ByType(builder);
             // int index = enemyCollection.GetIndex(builder);
-            int index = builder.key;
+            int index = prefab.key;
             ClearEnemyBuilder(index);
             enemies[index] = new EnemyController[quantity];
             for (int i = 0; i < quantity; i++)
@@ -42,25 +42,26 @@ namespace Germinator
                 // enemy.transform.parent = transform;
                 // Debug.Log($"Spawning enemy {enemy.name}");
                 // builder.behaviour.OnSpawn(enemy);
-                GameObject enemy = Instantiate(builder.behaviour.gameObject, transform);
-                EnemySpecie enemySpecie = enemy.GetComponent<EnemySpecie>();
-                enemySpecie.builder = builder;
+                GameObject enemy = Instantiate(prefab.gameObject, transform);
+                EnemyController enemyController = enemy.GetComponent<EnemyController>();
+                // EnemySpecie enemySpecie = enemy.GetComponent<EnemySpecie>();
+                // enemySpecie.builder = builder;
 
-                EnemyController enemyController = enemy.AddComponent<EnemyController>();
-                enemyController.builder = builder;
-                enemyController.specie = enemySpecie;
+                // EnemyController enemyController = enemy.AddComponent<EnemyController>();
+                // enemyController.builder = builder;
+                // enemyController.specie = enemySpecie;
 
-                CircleCollider2D circleCollider2D = enemy.AddComponent<CircleCollider2D>();
-                circleCollider2D.radius = 0.5f;
-                circleCollider2D.offset = new Vector2(-0.28f, -0.29f);
-                circleCollider2D.isTrigger = true;
+                // CircleCollider2D circleCollider2D = enemy.AddComponent<CircleCollider2D>();
+                // circleCollider2D.radius = 0.5f;
+                // circleCollider2D.offset = new Vector2(-0.28f, -0.29f);
+                // circleCollider2D.isTrigger = true;
 
-                EnemyEntity enemyEntity = enemy.AddComponent<EnemyEntity>();
-                enemyEntity.data = enemyController.builder.data;
+                // EnemyEntity enemyEntity = enemy.AddComponent<EnemyEntity>();
+                // enemyEntity.data = enemyController.prefab.data;
 
-                enemySpecie.OnSpawn(enemy);
+                // enemySpecie.OnSpawn(enemy);
 
-                enemy.name = $"{builder.name} [{i}]";
+                enemy.name = $"{prefab.name} [{i}]";
                 enemies[index][i] = enemyController;
             }
         }
@@ -76,13 +77,13 @@ namespace Germinator
         }
 
         // Spawns some enemies of a given definition
-        public void Spawn(EnemyBuilder builder, int quantity)
+        public void Spawn(EnemyController prefab, int quantity)
         {
-            // int enemyIndex = enemyCollection.GetIndex(builder);
+            // int enemyIndex = enemyCollection.GetIndex(prefab);
             int remaining = quantity;
-            int index = lastIndices[builder.key];
+            int index = lastIndices[prefab.key];
             int attempts = 0;
-            var enemies = this.enemies[builder.key];
+            var enemies = this.enemies[prefab.key];
             Vector3 position = playerGameObject.transform.position + (Vector3)GetRandomPosition(4);
             while (remaining > 0 && attempts < enemies.Length)
             {
@@ -99,7 +100,7 @@ namespace Germinator
                 attempts++;
             }
 
-            lastIndices[builder.key] = index;
+            lastIndices[prefab.key] = index;
         }
 
         public void Clear()

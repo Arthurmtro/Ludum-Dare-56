@@ -191,21 +191,24 @@ namespace Germinator
                 visionCollider.transform.eulerAngles.z
             );
 
+            int numAttacks = 0;
             foreach (Collider2D target in targetsInVision)
             {
                 if (target == null)
+                {
                     continue;
+                }
 
                 Entity targetEntity = target.GetComponent<Entity>();
-                if (targetEntity != null && entity != null && targetEntity.type != entity.type)
+                if (targetEntity != null && targetEntity.IsActive && entity != null && targetEntity.type != entity.type)
                 {
-                    Debug.Log("Punch : " + target.gameObject.name);
+                    numAttacks++;
                     Attack(targetEntity);
                 }
             }
 
             Weapon activeWeapon = GetActiveWeapon();
-            if (activeWeapon != null && closestEnemy != null)
+            if (numAttacks > 0 && activeWeapon != null && closestEnemy != null)
             {
                 StartCoroutine(activeWeapon.Attack(closestEnemy));
             }

@@ -8,13 +8,13 @@ namespace Germinator
 {
     public struct EnemyBuilderQuantity
     {
-        public EnemyBuilderQuantity(EnemyBuilder builder, int quantity)
+        public EnemyBuilderQuantity(EnemyController prefab, int quantity)
         {
-            Builder = builder;
+            Prefab = prefab;
             Quantity = quantity;
         }
 
-        public EnemyBuilder Builder { get; }
+        public EnemyController Prefab { get; }
         public int Quantity;
         public void SetQuantity(int newValue)
         {
@@ -29,17 +29,17 @@ namespace Germinator
     [Serializable]
     public struct EnemyWaveStep
     {
-        public EnemyWaveStep(float time, EnemyBuilder builder, int quantity)
+        public EnemyWaveStep(float time, EnemyController prefab, int quantity)
         {
             Time = time;
-            Builder = builder;
+            Prefab = prefab;
             Quantity = quantity;
         }
 
         // Time when the step should be triggered
         public float Time;
         // Type of enemy to spawn
-        public EnemyBuilder Builder;
+        public EnemyController Prefab;
         // Quantity of enemies to spawn
         public int Quantity;
     }
@@ -65,15 +65,15 @@ namespace Germinator
             {
                 if (step.Quantity > 0)
                 {
-                    if (result.ContainsKey(step.Builder.key))
+                    if (result.ContainsKey(step.Prefab.key))
                     {
-                        int current = result[step.Builder.key].Quantity;
-                        result.Remove(step.Builder.key);
-                        result.Add(step.Builder.key, new EnemyBuilderQuantity(step.Builder, current + step.Quantity));
+                        int current = result[step.Prefab.key].Quantity;
+                        result.Remove(step.Prefab.key);
+                        result.Add(step.Prefab.key, new EnemyBuilderQuantity(step.Prefab, current + step.Quantity));
                     }
                     else
                     {
-                        result.Add(step.Builder.key, new EnemyBuilderQuantity(step.Builder, step.Quantity));
+                        result.Add(step.Prefab.key, new EnemyBuilderQuantity(step.Prefab, step.Quantity));
                     }
                 }
             }
@@ -93,9 +93,9 @@ namespace Germinator
             return this;
         }
 
-        public EnemyWaveBuilder AddStep(float time, EnemyBuilder builder, int quantity)
+        public EnemyWaveBuilder AddStep(float time, EnemyController prefab, int quantity)
         {
-            steps.Add(new EnemyWaveStep(time, builder, quantity));
+            steps.Add(new EnemyWaveStep(time, prefab, quantity));
             return this;
         }
 
@@ -104,7 +104,7 @@ namespace Germinator
             return new EnemyWave(duration, steps.ToArray());
         }
 
-        public static EnemyWave Random(float duration, int steps, int minEnemies, int maxEnemies, EnemyBuilder[] builders)
+        public static EnemyWave Random(float duration, int steps, int minEnemies, int maxEnemies, EnemyController[] prefabs)
         {
             EnemyWaveBuilder waveBuilder = new EnemyWaveBuilder().SetDuration(duration);
             System.Random random = new System.Random();
@@ -113,17 +113,17 @@ namespace Germinator
             for (int i = 0; i < steps; i++)
             {
                 float time = Math.Max(2f, (float)(i * stepDuration));
-                EnemyBuilder builder = builders[random.Next(0, builders.Length - 1)];
+                EnemyController prefab = prefabs[random.Next(0, prefabs.Length - 1)];
                 int quantity = (int)Math.Round(Mathf.Lerp(minEnemies, maxEnemies, (float)i / steps));
 
                 Debug.Log($"{time}: {quantity}");
-                waveBuilder.AddStep(time, builder, quantity);
+                waveBuilder.AddStep(time, prefab, quantity);
             }
 
             return waveBuilder.Build();
         }
 
-        internal static void Random(float duration, float v1, double v2, float v3, EnemyBuilder[] enemyBuilders)
+        internal static void Random(float duration, float v1, double v2, float v3, EnemyController[] prefabs)
         {
             throw new NotImplementedException();
         }

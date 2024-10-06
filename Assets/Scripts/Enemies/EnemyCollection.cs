@@ -36,10 +36,10 @@ namespace Germinator
 
         public void OnEnable()
         {
-            for (int i = 0; i < enemies.Length; i++)
-            {
-                enemyIndices.Add(enemies[i].type, i);
-            }
+            // for (int i = 0; i < enemies.Length; i++)
+            // {
+            //     // enemyIndices.Add(enemies[i].type, i);
+            // }
         }
     }
 }

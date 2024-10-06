@@ -23,5 +23,6 @@ MonoBehaviour:
       range: 2
       cooldown: 3
   behaviour: {fileID: 9164698139320915241, guid: b22f7bc4e032c41ba9c4122378393918, type: 3}
+  prefab: {fileID: 0}
   body: {fileID: 2800000, guid: 0a168e9060f4d4785949cbd5fef2db8e, type: 3}
   weapon: {fileID: 2800000, guid: 17ecbcdf00c18424e9eaa8e7d429e2a6, type: 3}

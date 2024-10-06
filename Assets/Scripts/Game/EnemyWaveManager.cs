@@ -25,7 +25,7 @@ namespace Germinator
         [SerializeField][Range(1, 300)] private int minEnemies;
         [SerializeField][Range(10, 600)] private int maxEnemies;
         [SerializeField][Range(1, 2)] private float waveMultiplier;
-        [SerializeField] private EnemyBuilder[] enemyBuilders;
+        [SerializeField] private EnemyController[] prefabs;
 
         [Header("Player information")]
         [SerializeField] private GameObject player;
@@ -80,7 +80,7 @@ namespace Germinator
             nextStepCandidate = 0;
             foreach (var quantity in quantities)
             {
-                enemyManager.InitEnemySpecies(quantity.Builder, quantity.Quantity);
+                enemyManager.InitEnemySpecies(quantity.Prefab, quantity.Quantity);
             }
         }
 
@@ -153,7 +153,7 @@ namespace Germinator
                 (int)Math.Round(steps * multiplier),
                 (int)Math.Round(minEnemies * multiplier),
                 (int)Math.Round(maxEnemies * multiplier),
-                enemyBuilders);
+                prefabs);
         }
 
         private EnemyWaveStep? GetNextStep()
@@ -175,7 +175,7 @@ namespace Germinator
 
         private void StartWaveStep(EnemyWaveStep step)
         {
-            enemyManager.Spawn(step.Builder, step.Quantity);
+            enemyManager.Spawn(step.Prefab, step.Quantity);
         }
 
         #region Events

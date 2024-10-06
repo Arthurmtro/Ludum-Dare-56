@@ -3,16 +3,15 @@ using UnityEngine;
 namespace Germinator
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class EnemyController : MonoBehaviour
+    public class EnemyController : Entity
     {
+        public int key = 0;
+
         #region Variables
 
         private Rigidbody2D rigidBody;
         private float randomSpeedMultiplier;
         private readonly System.Random random = new();
-
-        public EnemyBuilder builder;
-        public EnemySpecie specie;
 
         private GameObject target;
 
@@ -20,11 +19,14 @@ namespace Germinator
 
         #region State
 
-        public bool IsActive { get; set; }
         private bool canAttack = true;
         private bool isAttacking = false;
 
         #endregion
+
+        public EnemyController() : base(EntityType.Enemy)
+        {
+        }
 
 
         void Start()
@@ -34,7 +36,6 @@ namespace Germinator
             rigidBody.freezeRotation = true;
             randomSpeedMultiplier = 1 + (float)random.NextDouble();
 
-            specie.OnSpawn(gameObject);
         }
 
         public void Initialize(GameObject target)
@@ -42,28 +43,14 @@ namespace Germinator
             this.target = target;
         }
 
-        void Update()
-        {
-            if (!IsActive || target == null) return;
-
-            MoveTowards(target);
-
-            if (isAttacking && specie.CompletedAttack())
-            {
-                FinishAttack();
-            }
-        }
-
         public void MoveTowards(GameObject target)
         {
-            specie.OnTick();
 
             var direction = (Vector2)(target.transform.position - transform.position);
 
-            if (direction.magnitude > builder.data.attack.range)
+            if (direction.magnitude > data.attack.range)
             {
-                rigidBody.MovePosition(rigidBody.position + (randomSpeedMultiplier * builder.data.moveSpeed * Time.deltaTime * direction.normalized));
-                specie.OnMove();
+                rigidBody.MovePosition(rigidBody.position + (randomSpeedMultiplier * data.moveSpeed * Time.deltaTime * direction.normalized));
                 return;
             }
 
@@ -78,23 +65,14 @@ namespace Germinator
             isAttacking = true;
             canAttack = false;
 
-            specie.OnAttack();
         }
 
-        private void FinishAttack()
+        public override void OnDie()
         {
-            isAttacking = false;
-
-            // Delegate damage handling to the specie
-            // specie.DealDamage(target);
-
-            StartCoroutine(AttackCooldown());
+            Debug.Log("ON DIE");
+            IsActive = false;
         }
 
-        private IEnumerator AttackCooldown()
-        {
-            yield return new WaitForSeconds(builder.data.attack.cooldown);
-            canAttack = true;
-        }
+
     }
 }

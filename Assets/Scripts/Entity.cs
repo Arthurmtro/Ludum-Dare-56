@@ -8,6 +8,8 @@ namespace Germinator
     [Serializable]
     public class Entity : MonoBehaviour
     {
+        public bool IsActive { get; set; }
+
         public enum EntityType
         {
             Player,
@@ -26,9 +28,11 @@ namespace Germinator
         [Serializable]
         public struct Data
         {
+            public int index;
             public float maxHealth;
             public float health;
             public float moveSpeed;
+            public float invincibilityTime;
             public Attack attack;
         }
 
@@ -44,6 +48,11 @@ namespace Germinator
 
         public void OnTakeDamage(float damage)
         {
+            if (type == EntityType.Player)
+            {
+                return;
+            }
+            Debug.Log("I'm taking it !");
             data.health -= damage;
 
             if (data.health <= 0)
@@ -52,7 +61,7 @@ namespace Germinator
             }
         }
 
-        public void OnDie()
+        public virtual void OnDie()
         {
         }
     }
