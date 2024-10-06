@@ -175,8 +175,8 @@ MonoBehaviour:
   type: 1
   data:
     index: 0
-    maxHealth: 100
-    health: 100
+    maxHealth: 10
+    health: 10
     moveSpeed: 3
     invincibilityTime: 2
     attack:
