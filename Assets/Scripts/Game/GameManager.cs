@@ -79,6 +79,7 @@ namespace Germinator
             gameUI.UpdatePlayer(player.entity);
             gameUI.UpdateScore(kills, score);
             gameUI.UpdateCombo(comboLevel);
+            UpdateCameraFollow();
         }
 
         public void OnPausePress()
@@ -177,6 +178,7 @@ namespace Germinator
             comboKills = 0;
             musicManager.SetLevel(comboLevel - 1);
             gameUI.UpdateCombo(comboLevel);
+            UpdateCameraFollow();
         }
 
         private void ComboLevelDown()
@@ -191,6 +193,7 @@ namespace Germinator
             comboLevel--;
             musicManager.SetLevel(comboLevel - 1);
             gameUI.UpdateCombo(comboLevel);
+            UpdateCameraFollow();
         }
 
         private void OnSelectMod(int position)
@@ -205,6 +208,12 @@ namespace Germinator
             waveManager.InitWave();
             waveManager.SetActive(true);
             player.entity.IsActive = true;
+        }
+
+        private void UpdateCameraFollow()
+        {
+            cameraFollow.zoomOscillationSpeed = 6f + comboLevel;
+            cameraFollow.oscillationSpeed = 3f + comboLevel;
         }
     }
 }

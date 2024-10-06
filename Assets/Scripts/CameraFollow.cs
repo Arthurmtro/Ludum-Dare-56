@@ -34,7 +34,7 @@ namespace Germinator
 
         [SerializeField]
         [Tooltip("Speed at which the camera oscillates between zoom levels.")]
-        private float zoomOscillationSpeed = 6f;
+        public float zoomOscillationSpeed = 6f;
         #endregion
 
         #region Rotation
@@ -45,11 +45,11 @@ namespace Germinator
 
         [SerializeField]
         [Tooltip("How much the camera rotates left and right.")]
-        private float rotationFactor = 1f;
+        public float rotationFactor = 1f;
 
         [SerializeField]
         [Tooltip("Speed at which the camera oscillates between angles.")]
-        private float oscillationSpeed = 3f;
+        public float oscillationSpeed = 3f;
         #endregion
 
         private Camera cam;
