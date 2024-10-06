@@ -14,6 +14,7 @@ namespace Germinator
         #region events
 
         public UnityEvent onKill => entity.onKill;
+        public UnityEvent onHit => entity.onHit;
         public UnityEvent onDie => entity.onDie;
 
         #endregion

@@ -21,7 +21,7 @@ namespace Germinator
 
         public override void OnHit()
         {
-            Debug.Log("ON PLAYER HIT");
+            onHit.Invoke();
         }
         public override void OnDie()
         {

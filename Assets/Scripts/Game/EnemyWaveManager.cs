@@ -71,7 +71,7 @@ namespace Germinator
         public void InitWave()
         {
             currentWave = GetNextWave();
-            textWave.SetText((waveIndex + 1).ToString());
+            textWave.SetText($"WAVE {(waveIndex + 1)}");
 
             enemyManager.Clear();
             var quantities = currentWave.GetQuantities();
