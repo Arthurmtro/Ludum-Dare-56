@@ -77,7 +77,7 @@ namespace Germinator
             }
 
             attackCooldown += Time.deltaTime * data.attack.speed;
-            if (attackCooldown > data.attack.cooldown)
+            if (attackCooldown > data.attack.baseCooldown)
             {
                 canAttack = true;
             }
