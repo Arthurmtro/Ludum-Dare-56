@@ -62,7 +62,6 @@ namespace Germinator
                 attackPerc += Time.deltaTime * data.attack.speed;
                 if (attackPerc > 1f)
                 {
-                    Debug.Log("DAMAGE");
                     target.OnTakeDamage(data.attack.damage);
                     StopAttack();
                 }
