@@ -113,6 +113,8 @@ namespace Germinator
             startPosition = currentPunchTransform.position;
             startRotation = currentPunchTransform.rotation;
 
+            isPunching = false;
+
             float returnTravelTime = Mathf.Min(Vector3.Distance(currentPunchTransform.localPosition, currentArmLocalPositionOrigin) / attackSpeed, timeToWait);
             returnTravelTime = Mathf.Min(returnTravelTime, baseCooldown);
 
@@ -140,7 +142,6 @@ namespace Germinator
             currentPunchTransform.localPosition = currentArmLocalPositionOrigin;
             currentPunchTransform.localRotation = currentArmLocalRotationOrigin;
 
-            isPunching = false;
             isLeftPunch = !isLeftPunch;  // Switch between left and right punches
         }
     }

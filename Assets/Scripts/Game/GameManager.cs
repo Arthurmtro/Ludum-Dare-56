@@ -1,8 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Collections.LowLevel.Unsafe;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Germinator
@@ -29,6 +25,7 @@ namespace Germinator
 
         [SerializeField][Range(1, 60)] private float comboDuration = 10;
         private int kills = 0;
+        private int waveKills = 0;
         private int comboLevel = 0;
         private float comboRemaining = 0;
         private int comboKills = 0;
@@ -67,6 +64,7 @@ namespace Germinator
             kills = 0;
             score = 0;
             comboLevel = 0;
+            waveKills = 0;
             comboRemaining = comboDuration;
             player.Clear();
 
@@ -126,7 +124,7 @@ namespace Germinator
             waveManager.SetActive(false);
             player.entity.IsActive = false;
 
-            int newHp = (int)Math.Round(Math.Min(player.entity.data.maxHealth, player.entity.data.maxHealth * 1.1f));
+            int newHp = (int)Math.Round(Math.Min(player.entity.data.maxHealth, player.entity.data.health + player.entity.data.maxHealth * 0.1f));
             player.entity.data.health = newHp;
             gameUI.UpdatePlayer(player.entity);
         }
@@ -150,6 +148,7 @@ namespace Germinator
         public void OnPlayerKills()
         {
             kills++;
+            waveKills++;
             comboKills++;
             score += 10 * comboLevel;
 
@@ -159,6 +158,11 @@ namespace Germinator
             }
 
             gameUI.UpdateScore(kills, score);
+
+            if (waveKills >= waveManager.currentWave.NumEnemies())
+            {
+                OnWaveFinish();
+            }
         }
 
         public void OnPlayerHit()
@@ -208,6 +212,7 @@ namespace Germinator
 
         private void OnSelectMod(int position)
         {
+            waveKills = 0;
             IsActive = true;
             effectManager.StopWaveParticles();
             animator.SetInteger("Section", (int)GameSection.Game);

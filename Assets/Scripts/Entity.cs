@@ -62,10 +62,13 @@ namespace Germinator
             {
                 return false;
             }
+            if (!IsActive)
+            {
+                return false;
+            }
 
             data.health -= damage;
 
-            OnHit();
             if (data.health <= 0)
             {
                 IsActive = false;
@@ -73,6 +76,7 @@ namespace Germinator
                 return true;
             }
 
+            OnHit();
             lastHitTime = Time.time;
 
             return false;
