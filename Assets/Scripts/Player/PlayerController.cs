@@ -16,6 +16,21 @@ namespace Germinator
 
         private PlayerAnimationController animationController;
 
+        [Serializable]
+        public struct SoundsClip
+        {
+            public AudioClip hurt;
+        }
+
+        public SoundsClip soundsClip;
+
+        public AudioSource audioSource;
+
+        public enum Sounds
+        {
+            Hurt,
+        }
+
         #region events
 
         public UnityEvent onKill => entity.onKill;
@@ -80,5 +95,18 @@ namespace Germinator
         public void OnAttackDamageModifier() => SetAttackDamage(entity.data.attack.damage * 1.10f);
 
         public void ChangeBodyColor(Color targetColor, float transitionSpeed) => StartCoroutine(animationController.ChangeBodyColor(targetColor, transitionSpeed));
+
+        public void PlaySound(Sounds sound)
+        {
+            switch (sound)
+            {
+                case Sounds.Hurt:
+                    if (soundsClip.hurt != null)
+                    {
+                        audioSource.PlayOneShot(soundsClip.hurt);
+                    }
+                    break;
+            }
+        }
     }
 }
