@@ -64,6 +64,8 @@ namespace Germinator
                 enabled = false;
                 return;
             }
+
+            entity.IsActive = true;
         }
 
         private void Start()
@@ -73,8 +75,10 @@ namespace Germinator
 
         private void Update()
         {
-            if (entity == null)
+            if (entity == null || !entity.IsActive)
+            {
                 return;
+            }
 
             UpdateColliderSizes();
             UpdateClosestEnemy();
@@ -126,7 +130,7 @@ namespace Germinator
             }
 
             closestEnemy = enemiesInRange
-                .Where(e => e != null && e.GetComponent<Collider2D>() != null)
+                .Where(e => e.IsActive && e != null && e.GetComponent<Collider2D>() != null)
                 .OrderBy(e =>
                     Vector3.Distance(transform.position, e.GetComponent<Collider2D>().bounds.center)
                 )
@@ -154,6 +158,11 @@ namespace Germinator
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
+            if (!entity.IsActive)
+            {
+                return;
+            }
+
             Entity targetEntity = collider.GetComponent<Entity>();
             if (targetEntity != null && targetEntity.type != entity.type)
             {
@@ -163,6 +172,11 @@ namespace Germinator
 
         private void OnTriggerExit2D(Collider2D collider)
         {
+            if (!entity.IsActive)
+            {
+                return;
+            }
+
             Entity targetEntity = collider.GetComponent<Entity>();
             if (targetEntity != null)
             {
@@ -172,16 +186,24 @@ namespace Germinator
 
         private void OnTriggerStay2D(Collider2D collider)
         {
+            if (!entity.IsActive)
+            {
+                return;
+            }
+
             if (canAttack && closestEnemy != null && visionCollider != null)
             {
-                Debug.Log("OnTriggerStay2D");
                 StartCoroutine(HandleAttack());
             }
         }
 
         private IEnumerator HandleAttack()
         {
-            Debug.Log("Execute HandleAttack");
+            if (!entity.IsActive)
+            {
+                yield return null;
+            }
+
             canAttack = false;
 
             Vector3 boxCenter = visionCollider.transform.TransformPoint(visionCollider.offset);

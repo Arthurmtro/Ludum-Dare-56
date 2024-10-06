@@ -28,7 +28,7 @@ namespace Germinator
         [SerializeField] private EnemyController[] prefabs;
 
         [Header("Player information")]
-        [SerializeField] private GameObject player;
+        [SerializeField] private PlayerController player;
 
         #endregion
 
@@ -87,6 +87,7 @@ namespace Germinator
         public void SetActive(bool value)
         {
             isActive = value;
+            enemyManager.SetActive(value);
         }
 
         void Start()
@@ -95,17 +96,8 @@ namespace Germinator
             {
                 enemyManager = gameObject.AddComponent<EnemyManager>();
                 enemyManager.usedEnemiesTypes = 5;
-                enemyManager.playerGameObject = player;
+                enemyManager.player = player;
                 enemyManager.Init();
-            }
-
-            if (player == null)
-            {
-                player = GameObject.FindGameObjectWithTag("Player");
-                if (player == null)
-                {
-                    Debug.LogError("Player not found");
-                }
             }
         }
 
