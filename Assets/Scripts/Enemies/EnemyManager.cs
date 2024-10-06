@@ -33,7 +33,7 @@ namespace Germinator
         {
             // var enemyInfo = enemyCollection.ByType(builder);
             // int index = enemyCollection.GetIndex(builder);
-            int index = prefab.key;
+            int index = prefab.data.index;
             ClearEnemyBuilder(index);
             enemies[index] = new EnemyController[quantity];
             for (int i = 0; i < quantity; i++)
@@ -89,9 +89,9 @@ namespace Germinator
         {
             // int enemyIndex = enemyCollection.GetIndex(prefab);
             int remaining = quantity;
-            int index = lastIndices[prefab.key];
+            int index = lastIndices[prefab.data.index];
             int attempts = 0;
-            var enemies = this.enemies[prefab.key];
+            var enemies = this.enemies[prefab.data.index];
             Vector3 position = player.transform.position + (Vector3)GetRandomPosition(4);
             while (remaining > 0 && attempts < enemies.Length)
             {
@@ -99,7 +99,7 @@ namespace Germinator
                 var enemy = enemies[index];
                 if (!enemy.IsActive)
                 {
-                    enemy.transform.position = position + new Vector3((float)random.NextDouble() * 1f, (float)random.NextDouble() * 1f, 0f);
+                    enemy.transform.position = position + new Vector3((float)random.NextDouble() * 3f, (float)random.NextDouble() * 3f, 0f);
                     remaining--;
                     enemy.IsActive = true;
                 }
@@ -108,7 +108,7 @@ namespace Germinator
                 attempts++;
             }
 
-            lastIndices[prefab.key] = index;
+            lastIndices[prefab.data.index] = index;
         }
 
         public void Clear()

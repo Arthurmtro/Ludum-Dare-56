@@ -74,6 +74,7 @@ namespace Germinator
             animator.SetBool("GameUI", false);
             animator.SetInteger("Section", (int)GameSection.WaveFinish);
             effectManager.StartWaveParticles();
+            waveManager.SetActive(false);
             player.entity.IsActive = false;
         }
 
@@ -117,6 +118,7 @@ namespace Germinator
             waveManager.NextWave();
             waveManager.InitWave();
             waveManager.SetActive(true);
+            player.entity.IsActive = true;
         }
     }
 }

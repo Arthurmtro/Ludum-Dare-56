@@ -65,15 +65,15 @@ namespace Germinator
             {
                 if (step.Quantity > 0)
                 {
-                    if (result.ContainsKey(step.Prefab.key))
+                    if (result.ContainsKey(step.Prefab.data.index))
                     {
-                        int current = result[step.Prefab.key].Quantity;
-                        result.Remove(step.Prefab.key);
-                        result.Add(step.Prefab.key, new EnemyBuilderQuantity(step.Prefab, current + step.Quantity));
+                        int current = result[step.Prefab.data.index].Quantity;
+                        result.Remove(step.Prefab.data.index);
+                        result.Add(step.Prefab.data.index, new EnemyBuilderQuantity(step.Prefab, current + step.Quantity));
                     }
                     else
                     {
-                        result.Add(step.Prefab.key, new EnemyBuilderQuantity(step.Prefab, step.Quantity));
+                        result.Add(step.Prefab.data.index, new EnemyBuilderQuantity(step.Prefab, step.Quantity));
                     }
                 }
             }
