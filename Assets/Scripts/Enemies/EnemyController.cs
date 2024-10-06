@@ -37,7 +37,7 @@ namespace Germinator
             rigidBody.gravityScale = 0;
             rigidBody.freezeRotation = true;
             randomSpeedMultiplier = 1 + (float)random.NextDouble();
-
+            gameObject.tag = "Enemy";
         }
 
         public void Initialize(GameObject target)
