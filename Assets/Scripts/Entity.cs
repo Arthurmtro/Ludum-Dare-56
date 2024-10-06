@@ -48,17 +48,18 @@ namespace Germinator
 
         public void OnTakeDamage(float damage)
         {
-            if (type == EntityType.Player)
-            {
-                return;
-            }
-            Debug.Log("I'm taking it !");
             data.health -= damage;
 
+            OnHit();
             if (data.health <= 0)
             {
+                IsActive = false;
                 OnDie();
             }
+        }
+
+        public virtual void OnHit()
+        {
         }
 
         public virtual void OnDie()

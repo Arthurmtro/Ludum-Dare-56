@@ -21,6 +21,8 @@ namespace Germinator
 
         private bool canAttack = true;
         private bool isAttacking = false;
+        private float attackPerc = 0;
+        private float attackCooldown = 0;
 
         #endregion
 
@@ -43,7 +45,7 @@ namespace Germinator
             this.target = target;
         }
 
-        public void MoveTowards(GameObject target)
+        public void MoveTowards(Entity target)
         {
 
             var direction = (Vector2)(target.transform.position - transform.position);
@@ -51,28 +53,52 @@ namespace Germinator
             if (direction.magnitude > data.attack.range)
             {
                 rigidBody.MovePosition(rigidBody.position + (randomSpeedMultiplier * data.moveSpeed * Time.deltaTime * direction.normalized));
+                StopAttack();
                 return;
             }
 
+            if (isAttacking)
+            {
+                attackPerc += Time.deltaTime * data.attack.speed;
+                if (attackPerc > 1f)
+                {
+                    Debug.Log("DAMAGE");
+                    target.OnTakeDamage(data.attack.damage);
+                    StopAttack();
+                }
+                return;
+            }
             if (canAttack)
             {
-                Attack();
+                StartAttack();
+                return;
+            }
+
+            attackCooldown += Time.deltaTime * data.attack.speed;
+            if (attackCooldown > 1.0f)
+            {
+                canAttack = true;
             }
         }
 
-        private void Attack()
+        private void StartAttack()
         {
             isAttacking = true;
             canAttack = false;
-
+            attackPerc = 0;
+            attackCooldown = 0;
+        }
+        private void StopAttack()
+        {
+            isAttacking = false;
+            canAttack = false;
+            attackPerc = 0;
+            attackCooldown = 0;
         }
 
         public override void OnDie()
         {
-            Debug.Log("ON DIE");
             IsActive = false;
         }
-
-
     }
 }
