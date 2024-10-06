@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Germinator
@@ -66,7 +68,7 @@ namespace Germinator
             score = 0;
             comboLevel = 0;
             comboRemaining = comboDuration;
-            gameUI.UpdateScore(kills, score);
+            player.Clear();
 
             animator.SetInteger("Section", (int)GameSection.Game);
             animator.SetBool("GameUI", true);
@@ -77,6 +79,9 @@ namespace Germinator
             waveManager.SetActive(true);
             player.entity.IsActive = true;
             gameUI.UpdatePlayer(player.entity);
+            gameUI.UpdateScore(kills, score);
+            gameUI.UpdateCombo(comboLevel);
+            UpdateCameraFollow();
         }
 
         public void OnPausePress()
@@ -108,6 +113,7 @@ namespace Germinator
             animator.SetBool("GameUI", false);
             animator.SetInteger("Section", (int)GameSection.Start);
             cameraFollow.SetBaseDistance(1.5f);
+            effectManager.StopDeathParticles();
         }
 
         public void OnWaveFinish()
@@ -119,6 +125,10 @@ namespace Germinator
             effectManager.StartWaveParticles();
             waveManager.SetActive(false);
             player.entity.IsActive = false;
+
+            int newHp = (int)Math.Round(Math.Min(player.entity.data.maxHealth, player.entity.data.maxHealth * 1.1f));
+            player.entity.data.health = newHp;
+            gameUI.UpdatePlayer(player.entity);
         }
 
         public void OnSelectMod1()
@@ -128,12 +138,12 @@ namespace Germinator
         }
         public void OnSelectMod2()
         {
-            player.OnAttackSpeedModifier();
+            player.OnAttackDamageModifier();
             OnSelectMod(1);
         }
         public void OnSelectMod3()
         {
-            player.OnAttackDamageModifier();
+            player.OnAttackSpeedModifier();
             OnSelectMod(2);
         }
 
@@ -154,6 +164,7 @@ namespace Germinator
         public void OnPlayerHit()
         {
             gameUI.UpdatePlayer(player.entity);
+            player.ChangeBodyColor(Color.red, 1f);
         }
 
         public void OnPlayerDie()
@@ -164,6 +175,7 @@ namespace Germinator
             animator.SetBool("GameUI", false);
             animator.SetInteger("Section", (int)GameSection.GameOver);
             waveManager.SetActive(false);
+            effectManager.StartDeathParticles();
         }
 
         #endregion
@@ -175,13 +187,14 @@ namespace Germinator
             comboKills = 0;
             musicManager.SetLevel(comboLevel - 1);
             gameUI.UpdateCombo(comboLevel);
+            UpdateCameraFollow();
         }
 
         private void ComboLevelDown()
         {
             comboRemaining = comboDuration;
             comboKills = 0;
-            if (comboLevel > 0)
+            if (comboLevel <= 0)
             {
                 return;
             }
@@ -189,6 +202,7 @@ namespace Germinator
             comboLevel--;
             musicManager.SetLevel(comboLevel - 1);
             gameUI.UpdateCombo(comboLevel);
+            UpdateCameraFollow();
         }
 
         private void OnSelectMod(int position)
@@ -203,6 +217,12 @@ namespace Germinator
             waveManager.InitWave();
             waveManager.SetActive(true);
             player.entity.IsActive = true;
+        }
+
+        private void UpdateCameraFollow()
+        {
+            cameraFollow.zoomOscillationSpeed = 6f + comboLevel;
+            cameraFollow.oscillationSpeed = 3f + comboLevel;
         }
     }
 }
