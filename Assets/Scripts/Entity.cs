@@ -2,12 +2,19 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Germinator
 {
     [Serializable]
     public class Entity : MonoBehaviour
     {
+        #region
+
+        public UnityEvent onKill = new();
+
+        #endregion
+
         public bool IsActive { get; set; }
 
         public enum EntityType
@@ -46,7 +53,8 @@ namespace Germinator
 
         public void OnAttack() { }
 
-        public void OnTakeDamage(float damage)
+        // Returns whether the entity died
+        public bool OnTakeDamage(float damage)
         {
             data.health -= damage;
 
@@ -55,7 +63,10 @@ namespace Germinator
             {
                 IsActive = false;
                 OnDie();
+                return true;
             }
+
+            return false;
         }
 
         public virtual void OnHit()
