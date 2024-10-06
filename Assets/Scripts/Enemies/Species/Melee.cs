@@ -19,11 +19,12 @@ namespace Germinator
             body.name = "Body";
             body.transform.parent = gameObject.transform;
             body.transform.localPosition = Vector3.zero;
+            body.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
             SpriteRenderer bodyRenderer = body.AddComponent<SpriteRenderer>();
             bodyRenderer.sprite = Sprite.Create(
                 builder.body,
                 new Rect(0, 0, builder.body.width, builder.body.height),
-                new Vector2(0.5f, 0.5f)
+                new Vector2(1f, 1f)
             );
             bodyRenderer.sortingOrder = 2;
 
@@ -31,12 +32,14 @@ namespace Germinator
             weapon = new();
             weapon.name = "Weapon";
             weapon.transform.parent = gameObject.transform;
-            weapon.transform.localPosition = Vector3.zero;
+            weapon.transform.localPosition = new Vector3(0.111f, 0.042f, 0f);
+            weapon.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+
             SpriteRenderer weaponRenderer = weapon.AddComponent<SpriteRenderer>();
             weaponRenderer.sprite = Sprite.Create(
                 builder.weapon,
                 new Rect(0, 0, builder.weapon.width, builder.weapon.height),
-                new Vector2(0.5f, 0.5f)
+                new Vector2(1f, 1f)
             );
             weaponRenderer.sortingOrder = 1;
         }

@@ -47,9 +47,18 @@ namespace Germinator
                 GameObject enemy = Instantiate(builder.behaviour.gameObject, transform);
                 EnemySpecie enemySpecie = enemy.GetComponent<EnemySpecie>();
                 enemySpecie.builder = builder;
+
                 EnemyController enemyController = enemy.AddComponent<EnemyController>();
                 enemyController.builder = builder;
                 enemyController.specie = enemySpecie;
+
+                CircleCollider2D circleCollider2D = enemy.AddComponent<CircleCollider2D>();
+                circleCollider2D.radius = 0.5f;
+                circleCollider2D.offset = new Vector2(-0.28f, -0.29f);
+
+                EnemyEntity enemyEntity = enemy.AddComponent<EnemyEntity>();
+                enemyEntity.data = enemyController.builder.data;
+
                 enemySpecie.OnSpawn(enemy);
 
                 // EnemyController enemy = Instantiate(enemyInfo.prefab, transform);

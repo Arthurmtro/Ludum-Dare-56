@@ -71,7 +71,7 @@ namespace Germinator
 
                 if (
                     Vector3.Distance(owner.transform.position, targetPosition)
-                    > (owner.data.attack.range * 3)
+                    > (owner.data.attack.range * 4)
                 )
                 {
                     break;

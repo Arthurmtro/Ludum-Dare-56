@@ -28,6 +28,7 @@ namespace Germinator
         {
             rigidBody = GetComponent<Rigidbody2D>();
             rigidBody.gravityScale = 0;
+            rigidBody.freezeRotation = true;
             // randomSpeedMultiplier = 1 + (float)random.NextDouble();
             randomSpeedMultiplier = 1;
         }
@@ -39,12 +40,12 @@ namespace Germinator
 
         public void MoveTowards(Vector3 position)
         {
-            var direction = position - transform.position;
+            var direction = (Vector2)(position - transform.position);
 
             // Far away, move to player
-            if (direction.magnitude > 2)
+            if (direction.magnitude > 1)
             {
-                transform.position += randomSpeedMultiplier * builder.data.moveSpeed * Time.deltaTime * direction.normalized;
+                rigidBody.MovePosition(rigidBody.position + (randomSpeedMultiplier * builder.data.moveSpeed * Time.deltaTime * direction.normalized));
                 specie.OnMove();
                 specie.OnTick();
                 // rigidBody.velocity = randomSpeedMultiplier * speed * direction.normalized;
@@ -56,9 +57,9 @@ namespace Germinator
             specie.OnTick();
         }
 
-        void OnTriggerEnter2D(Collider2D collider)
-        {
-            IsActive = false;
-        }
+        // void OnTriggerEnter2D(Collider2D collider)
+        // {
+        //     IsActive = false;
+        // }
     }
 }
