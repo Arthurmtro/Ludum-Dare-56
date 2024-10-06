@@ -20,7 +20,7 @@ namespace Germinator
         [SerializeField][Range(10, 60)] private int sleepTicks = 10;
 
         [Header("Random waves")]
-        [SerializeField][Range(30, 120)] private float duration;
+        [SerializeField][Range(5, 120)] private float duration;
         [SerializeField][Range(5, 40)] private int steps;
         [SerializeField][Range(1, 300)] private int minEnemies;
         [SerializeField][Range(10, 600)] private int maxEnemies;

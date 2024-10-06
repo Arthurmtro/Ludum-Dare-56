@@ -36,6 +36,7 @@ namespace Germinator
         {
             if (!entity.IsActive)
             {
+                rigidBody.velocity = Vector3.zero;
                 return;
             }
             if (rigidBody != null && entity != null)
@@ -55,8 +56,8 @@ namespace Germinator
 
         public void Clear() => entity.data = defaultValues;
 
-        public void OnSpeedModifier() => SetMoveSpeed(entity.data.moveSpeed * 1.10f);
-        public void OnAttackSpeedModifier() => SetAttackSpeed(entity.data.attack.speed * 1.10f);
-        public void OnAttackDamageModifier() => SetAttackDamage(entity.data.attack.damage * 1.10f);
+        public void OnSpeedModifier() => SetMoveSpeed(entity.data.moveSpeed * 1.50f);
+        public void OnAttackSpeedModifier() => SetAttackSpeed(entity.data.attack.speed * 1.50f);
+        public void OnAttackDamageModifier() => SetAttackDamage(entity.data.attack.damage * 1.50f);
     }
 }
