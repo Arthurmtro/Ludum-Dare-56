@@ -8,13 +8,14 @@ namespace Germinator
     {
         #region Variables
 
-        public GameObject playerGameObject;
+        public PlayerController player;
 
         private EnemyController[][] enemies = Array.Empty<EnemyController[]>();
         public int usedEnemiesTypes;
 
         private int[] lastIndices = Array.Empty<int>();
         private readonly System.Random random = new();
+        private bool isActive = false;
 
         #endregion
 
@@ -66,6 +67,13 @@ namespace Germinator
             }
         }
 
+
+        public void SetActive(bool value)
+        {
+            isActive = value;
+        }
+
+
         public void InitOne()
         {
             // Init(EnemyBuilder.Type1, 100);
@@ -84,7 +92,7 @@ namespace Germinator
             int index = lastIndices[prefab.key];
             int attempts = 0;
             var enemies = this.enemies[prefab.key];
-            Vector3 position = playerGameObject.transform.position + (Vector3)GetRandomPosition(4);
+            Vector3 position = player.transform.position + (Vector3)GetRandomPosition(4);
             while (remaining > 0 && attempts < enemies.Length)
             {
                 index %= enemies.Length;
@@ -139,6 +147,11 @@ namespace Germinator
 
         public void Update()
         {
+            if (!isActive)
+            {
+                return;
+            }
+
             foreach (var definitionEnemies in enemies)
             {
                 foreach (var enemy in definitionEnemies)
@@ -146,7 +159,7 @@ namespace Germinator
                     // Check if active
                     if (enemy.IsActive)
                     {
-                        enemy.MoveTowards(playerGameObject);
+                        enemy.MoveTowards(player.entity);
                     }
                 }
             }

@@ -20,7 +20,7 @@ namespace Germinator
         [SerializeField][Range(10, 60)] private int sleepTicks = 10;
 
         [Header("Random waves")]
-        [SerializeField][Range(30, 120)] private float duration;
+        [SerializeField][Range(5, 120)] private float duration;
         [SerializeField][Range(5, 40)] private int steps;
         [SerializeField][Range(1, 300)] private int minEnemies;
         [SerializeField][Range(10, 600)] private int maxEnemies;
@@ -28,7 +28,7 @@ namespace Germinator
         [SerializeField] private EnemyController[] prefabs;
 
         [Header("Player information")]
-        [SerializeField] private GameObject player;
+        [SerializeField] private PlayerController player;
 
         #endregion
 
@@ -87,6 +87,7 @@ namespace Germinator
         public void SetActive(bool value)
         {
             isActive = value;
+            enemyManager.SetActive(value);
         }
 
         void Start()
@@ -95,17 +96,8 @@ namespace Germinator
             {
                 enemyManager = gameObject.AddComponent<EnemyManager>();
                 enemyManager.usedEnemiesTypes = 5;
-                enemyManager.playerGameObject = player;
+                enemyManager.player = player;
                 enemyManager.Init();
-            }
-
-            if (player == null)
-            {
-                player = GameObject.FindGameObjectWithTag("Player");
-                if (player == null)
-                {
-                    Debug.LogError("Player not found");
-                }
             }
         }
 

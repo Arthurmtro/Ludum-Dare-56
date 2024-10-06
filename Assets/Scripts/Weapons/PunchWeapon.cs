@@ -62,11 +62,6 @@ namespace Germinator
 
             while (Vector3.Distance(currentPunchTransform.position, targetPosition) > 0.1f)
             {
-                Debug.Log(
-                    "Moving from world position : "
-                        + Vector3.Distance(currentPunchTransform.position, targetPosition)
-                );
-
                 currentPunchTransform.position = Vector3.MoveTowards(
                     currentPunchTransform.position,
                     targetPosition,
@@ -88,10 +83,6 @@ namespace Germinator
 
             while (Vector3.Distance(currentPunchTransform.localPosition, originalPosition) > 0.1f)
             {
-                Debug.Log(
-                    "Moving from local position"
-                        + Vector3.Distance(currentPunchTransform.position, targetPosition)
-                );
                 Vector3 previousPosition = currentPunchTransform.localPosition;
                 currentPunchTransform.localPosition = Vector3.MoveTowards(
                     currentPunchTransform.localPosition,

@@ -15,9 +15,18 @@ MonoBehaviour:
   waves:
   - Duration: 60
     Steps:
-    - Time: 3
+    - Time: 2
       Prefab: {fileID: 1385611694690061846, guid: b22f7bc4e032c41ba9c4122378393918, type: 3}
       Quantity: 1
+    - Time: 4
+      Prefab: {fileID: 1385611694690061846, guid: 05d980082cfc0eb48a49e0bac3df1d20, type: 3}
+      Quantity: 20
     - Time: 10
       Prefab: {fileID: 1385611694690061846, guid: b22f7bc4e032c41ba9c4122378393918, type: 3}
       Quantity: 10
+    - Time: 15
+      Prefab: {fileID: 1385611694690061846, guid: b22f7bc4e032c41ba9c4122378393918, type: 3}
+      Quantity: 10
+    - Time: 20
+      Prefab: {fileID: 1385611694690061846, guid: b22f7bc4e032c41ba9c4122378393918, type: 3}
+      Quantity: 20
