@@ -37,7 +37,7 @@ namespace Germinator
             rigidBody.gravityScale = 0;
             rigidBody.freezeRotation = true;
             randomSpeedMultiplier = 1 + (float)random.NextDouble();
-
+            gameObject.tag = "Enemy";
         }
 
         public void Initialize(GameObject target)
@@ -62,7 +62,6 @@ namespace Germinator
                 attackPerc += Time.deltaTime * data.attack.speed;
                 if (attackPerc > 1f)
                 {
-                    Debug.Log("DAMAGE");
                     target.OnTakeDamage(data.attack.damage);
                     StopAttack();
                 }

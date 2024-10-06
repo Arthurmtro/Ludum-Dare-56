@@ -244,7 +244,11 @@ namespace Germinator
             if (targetEntity == null || entity?.data.attack == null)
                 return;
 
-            targetEntity.OnTakeDamage(entity.data.attack.damage);
+            bool didKill = targetEntity.OnTakeDamage(entity.data.attack.damage);
+            if (didKill)
+            {
+                entity.onKill.Invoke();
+            }
         }
     }
 }

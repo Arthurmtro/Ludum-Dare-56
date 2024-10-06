@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 namespace Germinator
@@ -21,16 +22,49 @@ namespace Germinator
         [SerializeField] private CameraFollow cameraFollow;
         [SerializeField] private PlayerController player;
 
+        #region Score
+
+        [SerializeField][Range(1, 60)] private float comboDuration = 10;
+        private int kills = 0;
+        private int comboLevel = 0;
+        private float comboRemaining = 0;
+        private int comboKills = 0;
+        private int score = 0;
+
+        #endregion
+
         #region  Events
+
+        public bool IsActive { get; set; }
 
         public void Start()
         {
             waveManager.onWaveFinish.AddListener(OnWaveFinish);
+            player.onKill.AddListener(OnPlayerKills);
             player.onDie.AddListener(OnPlayerDie);
+        }
+
+        void Update()
+        {
+            if (!IsActive)
+            {
+                return;
+            }
+
+            comboRemaining -= Time.deltaTime;
+            if (comboRemaining <= 0)
+            {
+                ComboLevelDown();
+            }
         }
 
         public void OnPlayPress()
         {
+            kills = 0;
+            comboLevel = 0;
+            score = 0;
+            comboRemaining = comboDuration;
+
             animator.SetInteger("Section", (int)GameSection.Game);
             animator.SetBool("GameUI", true);
             musicManager.SetQuiet(false);
@@ -43,6 +77,7 @@ namespace Germinator
 
         public void OnPausePress()
         {
+            IsActive = false;
             animator.SetBool("Pause", true);
             musicManager.SetQuiet(true);
             cameraFollow.SetBaseDistance(1.5f);
@@ -52,6 +87,7 @@ namespace Germinator
 
         public void OnResumePress()
         {
+            IsActive = true;
             animator.SetBool("Pause", false);
             musicManager.SetQuiet(false);
             cameraFollow.SetBaseDistance(5f);
@@ -61,7 +97,9 @@ namespace Germinator
 
         public void OnExitPress()
         {
+            IsActive = false;
             musicManager.SetQuiet(true);
+            musicManager.SetLevel(1);
             animator.SetBool("Pause", false);
             animator.SetBool("GameUI", false);
             animator.SetInteger("Section", (int)GameSection.Start);
@@ -70,6 +108,7 @@ namespace Germinator
 
         public void OnWaveFinish()
         {
+            IsActive = false;
             cameraFollow.SetBaseDistance(1.5f);
             animator.SetBool("GameUI", false);
             animator.SetInteger("Section", (int)GameSection.WaveFinish);
@@ -80,25 +119,37 @@ namespace Germinator
 
         public void OnSelectMod1()
         {
-            Debug.Log("Select Modifier 1");
             player.OnSpeedModifier();
             OnSelectMod(0);
         }
         public void OnSelectMod2()
         {
-            Debug.Log("Select Modifier 2");
             player.OnAttackSpeedModifier();
             OnSelectMod(1);
         }
         public void OnSelectMod3()
         {
-            Debug.Log("Select Modifier 3");
             player.OnAttackDamageModifier();
             OnSelectMod(2);
         }
 
+        public void OnPlayerKills()
+        {
+            kills++;
+            comboKills++;
+            score += 10 * comboLevel;
+
+            if (comboKills >= 10 * comboLevel)
+            {
+                ComboLevelUp();
+            }
+
+            Debug.Log($"{kills} kills - {score}");
+        }
+
         public void OnPlayerDie()
         {
+            IsActive = false;
             musicManager.SetQuiet(true);
             cameraFollow.SetBaseDistance(1.5f);
             animator.SetBool("GameUI", false);
@@ -108,8 +159,30 @@ namespace Germinator
 
         #endregion
 
+        private void ComboLevelUp()
+        {
+            comboLevel++;
+            comboRemaining = comboDuration;
+            comboKills = 0;
+            musicManager.SetLevel(comboLevel - 1);
+        }
+
+        private void ComboLevelDown()
+        {
+            comboRemaining = comboDuration;
+            comboKills = 0;
+            if (comboLevel > 0)
+            {
+                return;
+            }
+
+            comboLevel--;
+            musicManager.SetLevel(comboLevel - 1);
+        }
+
         private void OnSelectMod(int position)
         {
+            IsActive = true;
             effectManager.StopWaveParticles();
             animator.SetInteger("Section", (int)GameSection.Game);
             animator.SetBool("GameUI", true);

@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Germinator
@@ -18,9 +17,8 @@ namespace Germinator
         private Vector3 leftOriginalPosition;
         private Vector3 rightOriginalPosition;
         private Transform currentPunchTransform;
-        private float currentPunchAngle;
-        private bool isPunching = false;
         private bool isLeftPunch = true;
+        private bool isPunching = false;
 
         protected override void Awake()
         {
@@ -31,51 +29,34 @@ namespace Germinator
 
         private void Update()
         {
-            // sortingOrder
             leftPunchTransform.GetComponent<SpriteRenderer>().sortingOrder = playerAnimationController.bodyDirection == 1 ? 6 : 2;
             rightPunchTransform.GetComponent<SpriteRenderer>().sortingOrder = playerAnimationController.bodyDirection == 1 ? 2 : 6;
-
-            if (isPunching)
-            {
-                Vector3 localScale = transform.localScale;
-                localScale.x = playerAnimationController.bodyDirection;
-                transform.localScale = localScale;
-
-                currentPunchTransform.rotation = Quaternion.Euler(
-                    0,
-                    0,
-                    currentPunchAngle - (playerAnimationController.bodyDirection == 1 ? 180f : 0f)
-                );
-            }
         }
 
         public override IEnumerator Attack(Entity target)
         {
+            if (isPunching)
+                yield break;
+
             isPunching = true;
-            Vector3 targetPosition = target.GetComponent<Collider2D>().bounds.center;
+
+            Vector3 lockedTargetPosition = target.GetComponent<Collider2D>().bounds.center;
 
             currentPunchTransform = isLeftPunch ? leftPunchTransform : rightPunchTransform;
             Vector3 originalPosition = isLeftPunch ? leftOriginalPosition : rightOriginalPosition;
 
-            Vector3 direction = (targetPosition - currentPunchTransform.position).normalized;
-            currentPunchAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + ((!isLeftPunch ? 50 : 110) * -playerAnimationController.bodyDirection);
+            Vector3 direction = (lockedTargetPosition - currentPunchTransform.position).normalized;
+            float punchAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-            while (Vector3.Distance(currentPunchTransform.position, targetPosition) > 0.1f)
+            currentPunchTransform.rotation = Quaternion.Euler(0, 0, punchAngle - 270f);
+
+            while (Vector3.Distance(currentPunchTransform.position, lockedTargetPosition) > 0.1f)
             {
                 currentPunchTransform.position = Vector3.MoveTowards(
                     currentPunchTransform.position,
-                    targetPosition,
+                    lockedTargetPosition,
                     punchSpeed * Time.deltaTime
                 );
-
-                if (
-                    Vector3.Distance(owner.transform.position, targetPosition)
-                    > (owner.data.attack.range * 4)
-                )
-                {
-                    break;
-                }
-
                 yield return null;
             }
 
@@ -83,24 +64,15 @@ namespace Germinator
 
             while (Vector3.Distance(currentPunchTransform.localPosition, originalPosition) > 0.1f)
             {
-                Vector3 previousPosition = currentPunchTransform.localPosition;
                 currentPunchTransform.localPosition = Vector3.MoveTowards(
                     currentPunchTransform.localPosition,
                     originalPosition,
                     punchSpeed * Time.deltaTime
                 );
-
-                if (
-                    Vector3.Distance(previousPosition, currentPunchTransform.localPosition) < 0.001f
-                )
-                {
-                    break;
-                }
-
                 yield return null;
             }
 
-            currentPunchTransform.localRotation = Quaternion.Euler(0, 0, (!isLeftPunch ? 8.5f : 15) * -playerAnimationController.bodyDirection);
+            currentPunchTransform.localRotation = Quaternion.identity;
 
             isPunching = false;
             isLeftPunch = !isLeftPunch;
