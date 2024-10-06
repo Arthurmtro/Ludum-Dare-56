@@ -12,19 +12,27 @@ namespace Germinator
         [SerializeField]
         private float eyesMaxMoveRange = 0.3f;
 
+        private PlayerController playerController;
+
         [SerializeField]
         private float eyesMoveSpeed = 2f;
 
         [Header("Legs animation")]
         [SerializeField]
-        private float legSwingSpeed = 5f;
+        private float legSwingSpeed = 8f;
 
         [SerializeField]
-        private float legSwingAngle = 5f;
+        private float legSwingAngle = 10f;
 
-        public bool isWalking = false;
+        [Header("Body animation")]
+        [SerializeField]
+        private float bodyBobSpeed = 2f;
+
+        [SerializeField]
+        private float bodyBobAmount = 0.05f;
 
         private Vector3 initialEyesPosition;
+        private Vector3 initialBodyPosition;
         public Vector3 targetPosition;
         private Vector3 mousePositionInWorld;
 
@@ -32,7 +40,9 @@ namespace Germinator
 
         void Start()
         {
+            playerController = GetComponent<PlayerController>();
             initialEyesPosition = spriteManager.GetBodyPart(BodyPart.Eyes).transform.localPosition;
+            initialBodyPosition = spriteManager.GetBodyPart(BodyPart.Body).transform.localPosition;
         }
 
         void Update()
@@ -42,6 +52,7 @@ namespace Germinator
 
             BodyTracking();
             EyesTracking();
+            BodyBobbing();
             LegsSwinging();
         }
 
@@ -80,15 +91,16 @@ namespace Germinator
 
         private void LegsSwinging()
         {
-            if (!isWalking)
+            if (!playerController.isMoving)
             {
+                spriteManager.GetBodyPart(BodyPart.LeftLeg).transform.localRotation = Quaternion.identity;
+                spriteManager.GetBodyPart(BodyPart.RightLeg).transform.localRotation = Quaternion.identity;
                 return;
             }
 
-            // Calculate a swinging angle using Mathf.Sin to oscillate over time
-            float swingAngle = Mathf.Sin(Time.time * legSwingSpeed) * legSwingAngle;
+            float timeFactor = Time.time * legSwingSpeed;
+            float swingAngle = Mathf.Sin(timeFactor) * legSwingAngle;
 
-            // Apply the swing angle to the left and right legs
             spriteManager.GetBodyPart(BodyPart.LeftLeg).transform.localRotation = Quaternion.Euler(
                 0,
                 0,
@@ -99,6 +111,18 @@ namespace Germinator
                 0,
                 -swingAngle
             );
+        }
+
+        private void BodyBobbing()
+        {
+            if (!playerController.isMoving)
+            {
+                spriteManager.GetBodyPart(BodyPart.Body).transform.localPosition = initialBodyPosition;
+                return;
+            }
+
+            float bobOffset = Mathf.Sin(Time.time * bodyBobSpeed) * bodyBobAmount;
+            spriteManager.GetBodyPart(BodyPart.Body).transform.localPosition = initialBodyPosition + new Vector3(0, bobOffset, 0);
         }
     }
 }

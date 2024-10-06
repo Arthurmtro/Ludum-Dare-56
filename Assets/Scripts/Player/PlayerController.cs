@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 namespace Germinator
 {
@@ -8,8 +9,9 @@ namespace Germinator
         private Vector2 movementDirection;
 
         private PlayerEntity playerEntity;
-
         private Entity.Data defaultValues = new Entity.Data();
+
+        public bool isMoving = false;
 
         void Start()
         {
@@ -23,6 +25,16 @@ namespace Germinator
                 Input.GetAxisRaw("Horizontal"),
                 Input.GetAxisRaw("Vertical")
             ).normalized;
+
+            bool currentlyMoving = movementDirection != Vector2.zero;
+            if (currentlyMoving && !isMoving)
+            {
+                isMoving = true;
+            }
+            else if (!currentlyMoving && isMoving)
+            {
+                isMoving = false;
+            }
         }
 
         void FixedUpdate()
