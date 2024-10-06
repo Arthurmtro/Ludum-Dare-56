@@ -10,6 +10,7 @@ namespace Germinator
         private Vector2 movementDirection;
 
         public PlayerEntity entity;
+        private EntitySpriteManager spriteManager;
 
         #region events
 
@@ -26,6 +27,7 @@ namespace Germinator
         void Awake()
         {
             entity = GetComponent<PlayerEntity>();
+            spriteManager = GetComponent<EntitySpriteManager>();
             defaultValues = entity.data;
         }
 
@@ -74,5 +76,7 @@ namespace Germinator
         public void OnSpeedModifier() => SetMoveSpeed(entity.data.moveSpeed * 1.50f);
         public void OnAttackSpeedModifier() => SetAttackSpeed(entity.data.attack.speed * 1.50f);
         public void OnAttackDamageModifier() => SetAttackDamage(entity.data.attack.damage * 1.50f);
+
+        public void ChangeBodyColor(Color targetColor, float transitionSpeed) => StartCoroutine(spriteManager.ChangeBodyColor(targetColor, transitionSpeed));
     }
 }
