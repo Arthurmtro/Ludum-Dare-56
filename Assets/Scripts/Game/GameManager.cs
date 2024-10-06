@@ -126,7 +126,7 @@ namespace Germinator
             waveManager.SetActive(false);
             player.entity.IsActive = false;
 
-            int newHp = (int)Math.Round(Math.Min(player.entity.data.maxHealth, player.entity.data.maxHealth * 1.1f));
+            int newHp = (int)Math.Round(Math.Min(player.entity.data.maxHealth, player.entity.data.health + player.entity.data.maxHealth * 0.1f));
             player.entity.data.health = newHp;
             gameUI.UpdatePlayer(player.entity);
         }

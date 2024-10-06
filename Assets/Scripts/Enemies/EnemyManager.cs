@@ -102,6 +102,7 @@ namespace Germinator
                     enemy.transform.position = position + new Vector3((float)random.NextDouble() * 3f, (float)random.NextDouble() * 3f, 0f);
                     remaining--;
                     enemy.IsActive = true;
+                    enemy.Appear();
                 }
 
                 index++;
