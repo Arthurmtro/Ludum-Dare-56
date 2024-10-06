@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Germinator
 {
-    public readonly struct EnemyBuilderQuantity
+    public struct EnemyBuilderQuantity
     {
         public EnemyBuilderQuantity(EnemyBuilder builder, int quantity)
         {
@@ -15,7 +15,15 @@ namespace Germinator
         }
 
         public EnemyBuilder Builder { get; }
-        public int Quantity { get; }
+        public int Quantity;
+        public void SetQuantity(int newValue)
+        {
+            Quantity = newValue;
+        }
+        public void AddQuantity(int newValue)
+        {
+            Quantity += newValue;
+        }
     }
 
     [Serializable]
@@ -52,16 +60,25 @@ namespace Germinator
 
         public readonly EnemyBuilderQuantity[] GetQuantities()
         {
-            List<EnemyBuilderQuantity> result = new();
+            Dictionary<int, EnemyBuilderQuantity> result = new();
             foreach (var step in Steps)
             {
                 if (step.Quantity > 0)
                 {
-                    result.Add(new EnemyBuilderQuantity(step.Builder, step.Quantity));
+                    if (result.ContainsKey(step.Builder.key))
+                    {
+                        int current = result[step.Builder.key].Quantity;
+                        result.Remove(step.Builder.key);
+                        result.Add(step.Builder.key, new EnemyBuilderQuantity(step.Builder, current + step.Quantity));
+                    }
+                    else
+                    {
+                        result.Add(step.Builder.key, new EnemyBuilderQuantity(step.Builder, step.Quantity));
+                    }
                 }
             }
 
-            return result.ToArray();
+            return result.Values.ToArray();
         }
     }
 
@@ -95,10 +112,11 @@ namespace Germinator
             float stepDuration = maxTime / steps;
             for (int i = 0; i < steps; i++)
             {
-                float time = Math.Max(0.1f, (float)(i * stepDuration));
+                float time = Math.Max(2f, (float)(i * stepDuration));
                 EnemyBuilder builder = builders[random.Next(0, builders.Length - 1)];
                 int quantity = (int)Math.Round(Mathf.Lerp(minEnemies, maxEnemies, (float)i / steps));
 
+                Debug.Log($"{time}: {quantity}");
                 waveBuilder.AddStep(time, builder, quantity);
             }
 

@@ -138,5 +138,10 @@ namespace Germinator
                 currentZoomTime = 0f;
             }
         }
+
+        public void SetBaseDistance(float newValue)
+        {
+            baseDistance = newValue;
+        }
     }
 }

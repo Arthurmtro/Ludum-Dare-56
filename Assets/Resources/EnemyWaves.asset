@@ -11,16 +11,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1fbe3a950e674ab8969bd8f05e2427b, type: 3}
   m_Name: EnemyWaves
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
   waves:
-  - Duration: 60
+  - Duration: 2
     Steps:
     - Time: 3
       Builder: {fileID: 11400000, guid: 9151d99637acb4246a513c826bcd4d13, type: 2}
-      Quantity: 100
-    - Time: 9
+      Quantity: 5
+    - Time: 5
       Builder: {fileID: 11400000, guid: 9151d99637acb4246a513c826bcd4d13, type: 2}
-      Quantity: 100
-    - Time: 14
-      Builder: {fileID: 11400000, guid: 9151d99637acb4246a513c826bcd4d13, type: 2}
-      Quantity: 50
+      Quantity: 10

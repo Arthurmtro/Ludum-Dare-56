@@ -60,9 +60,7 @@ namespace Germinator
 
                 enemySpecie.OnSpawn(enemy);
 
-                // EnemyController enemy = Instantiate(enemyInfo.prefab, transform);
                 enemy.name = $"{builder.name} [{i}]";
-                // enemy.Initialize(enemyInfo);
                 enemies[index][i] = enemyController;
             }
         }
@@ -131,7 +129,7 @@ namespace Germinator
 
         private Vector2 GetRandomPosition(float distance)
         {
-            float angle = (float)(random.NextDouble() * 2.0 * Math.PI);
+            float angle = (float)(random.NextDouble() * 5.0 * Math.PI);
 
             return new Vector2(Mathf.Cos(angle) * distance, Mathf.Sin(angle) * distance);
         }

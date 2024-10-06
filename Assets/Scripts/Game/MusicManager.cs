@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class MusicManager : MonoBehaviour
 {
@@ -8,15 +9,28 @@ public class MusicManager : MonoBehaviour
     [SerializeField][Range(0, 10)] private int level = 0;
     [SerializeField] private float duration;
     [SerializeField] private float tickDuration;
+    [SerializeField] private bool isQuiet = false;
 
     private AudioSource[] sources = Array.Empty<AudioSource>();
     private float[] targetVolumes = Array.Empty<float>();
     private float prevTime;
 
+    #region Getters
+    float MaxLevel => isQuiet ? 0.25f : 1f;
+    #endregion
+
+    #region Setters
+
     public void SetLevel(int newLevel)
     {
         level = newLevel;
     }
+    public void SetQuiet(bool newValue)
+    {
+        this.isQuiet = newValue;
+    }
+
+    #endregion
 
     void Start()
     {
@@ -25,8 +39,8 @@ public class MusicManager : MonoBehaviour
         for (int i = 0; i < clips.Length; i++)
         {
             var component = gameObject.AddComponent<AudioSource>();
-            component.volume = level >= i ? 1 : 0;
-            targetVolumes[i] = level >= i ? 1 : 0;
+            component.volume = level >= i ? MaxLevel : 0;
+            targetVolumes[i] = level >= i ? MaxLevel : 0;
             component.playOnAwake = true;
             component.loop = true;
             component.clip = clips[i];
@@ -58,7 +72,7 @@ public class MusicManager : MonoBehaviour
     {
         for (int i = 0; i < sources.Length; i++)
         {
-            targetVolumes[i] = level >= i ? 1 : 0;
+            targetVolumes[i] = level >= i ? MaxLevel : 0;
         }
     }
 

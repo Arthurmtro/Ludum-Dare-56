@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Germinator
@@ -21,11 +22,13 @@ namespace Germinator
         [Header("Random waves")]
         [SerializeField][Range(30, 120)] private float duration;
         [SerializeField][Range(5, 40)] private int steps;
-        [SerializeField][Range(10, 300)] private int minEnemies;
-        [SerializeField][Range(50, 600)] private int maxEnemies;
+        [SerializeField][Range(1, 300)] private int minEnemies;
+        [SerializeField][Range(10, 600)] private int maxEnemies;
         [SerializeField][Range(1, 2)] private float waveMultiplier;
+        [SerializeField] private EnemyBuilder[] enemyBuilders;
 
-        [Header("Player information")][SerializeField] private GameObject player;
+        [Header("Player information")]
+        [SerializeField] private GameObject player;
 
         #endregion
 
@@ -54,13 +57,18 @@ namespace Germinator
 
         #endregion
 
+        public void ClearWaves()
+        {
+            waveIndex = 0;
+        }
+
         public void NextWave()
         {
             enemyManager.Clear();
             waveIndex++;
         }
 
-        public void StartWave()
+        public void InitWave()
         {
             currentWave = GetNextWave();
             textWave.SetText((waveIndex + 1).ToString());
@@ -74,8 +82,11 @@ namespace Germinator
             {
                 enemyManager.InitEnemySpecies(quantity.Builder, quantity.Quantity);
             }
+        }
 
-            isActive = true;
+        public void SetActive(bool value)
+        {
+            isActive = value;
         }
 
         void Start()
@@ -109,6 +120,7 @@ namespace Germinator
             if (remainingTime == 0)
             {
                 isActive = false;
+                onWaveFinish.Invoke();
                 return;
             }
 
@@ -135,9 +147,13 @@ namespace Germinator
                 return waveCollection.AtIndex(waveIndex);
             }
 
-            float multiplier = (float)((waveIndex + 1) * waveMultiplier * random.NextDouble());
-            EnemyBuilder[] enemyBuilders = { };
-            return EnemyWaveBuilder.Random(duration, (int)Math.Round(steps * multiplier), (int)Math.Round(minEnemies * multiplier), (int)Math.Round(maxEnemies * multiplier), enemyBuilders);
+            float multiplier = 1 + 0.5f * (float)random.NextDouble();
+            return EnemyWaveBuilder.Random(
+                duration,
+                (int)Math.Round(steps * multiplier),
+                (int)Math.Round(minEnemies * multiplier),
+                (int)Math.Round(maxEnemies * multiplier),
+                enemyBuilders);
         }
 
         private EnemyWaveStep? GetNextStep()
@@ -161,5 +177,11 @@ namespace Germinator
         {
             enemyManager.Spawn(step.Builder, step.Quantity);
         }
+
+        #region Events
+
+        public readonly UnityEvent onWaveFinish = new();
+
+        #endregion
     }
 }
