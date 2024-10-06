@@ -119,7 +119,7 @@ namespace Germinator
             // Only check next steps every x ticks
             if ((tick++ % sleepTicks) == 0)
             {
-                textRemaining.SetText($"{Math.Round(remainingTime)}s");
+                textRemaining.SetText($"{Math.Round(remainingTime)}");
 
                 var nextStep = GetNextStep();
                 if (nextStep == null)

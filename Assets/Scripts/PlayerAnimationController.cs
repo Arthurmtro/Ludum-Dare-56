@@ -134,5 +134,38 @@ namespace Germinator
             float bobOffset = Mathf.Sin(Time.time * bodyBobSpeed) * bodyBobAmount;
             body.localPosition = initialBodyPosition + new Vector3(0, bobOffset, 0);
         }
+
+        public IEnumerator ChangeBodyColor(Color targetColor, float transitionSpeed)
+        {
+            float t = 0f;
+            while (t < 1f)
+            {
+                t += Time.deltaTime * transitionSpeed;
+                foreach (Transform child in bodyParts.transform)
+                {
+                    SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
+                    if (spriteRenderer != null)
+                    {
+                        spriteRenderer.color = Color.Lerp(spriteRenderer.color, targetColor, t);
+                    }
+                }
+                yield return null;
+            }
+
+            t = 0f;
+            while (t < 1f)
+            {
+                t += Time.deltaTime * transitionSpeed;
+                foreach (Transform child in bodyParts.transform)
+                {
+                    SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
+                    if (spriteRenderer != null)
+                    {
+                        spriteRenderer.color = Color.Lerp(spriteRenderer.color, Color.white, t);
+                    }
+                }
+                yield return null;
+            }
+        }
     }
 }

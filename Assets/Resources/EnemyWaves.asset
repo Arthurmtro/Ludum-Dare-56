@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnemyWaves
   m_EditorClassIdentifier: 
   waves:
-  - Duration: 60
+  - Duration: 20
     Steps:
     - Time: 2
       Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
@@ -24,9 +24,9 @@ MonoBehaviour:
     - Time: 10
       Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
       Quantity: 20
-    - Time: 20
+    - Time: 15
       Prefab: {fileID: 6522064493243914530, guid: 1e31602d1bdc34c0cb81be37a54ee232, type: 3}
       Quantity: 30
-    - Time: 20
+    - Time: 15
       Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
       Quantity: 40
