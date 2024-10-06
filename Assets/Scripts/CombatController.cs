@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -206,31 +207,8 @@ namespace Germinator
 
             canAttack = false;
 
-            Vector3 boxCenter = visionCollider.transform.TransformPoint(visionCollider.offset);
-            Collider2D[] targetsInVision = Physics2D.OverlapBoxAll(
-                boxCenter,
-                visionCollider.size,
-                visionCollider.transform.eulerAngles.z
-            );
-
-            int numAttacks = 0;
-            foreach (Collider2D target in targetsInVision)
-            {
-                if (target == null)
-                {
-                    continue;
-                }
-
-                Entity targetEntity = target.GetComponent<Entity>();
-                if (targetEntity != null && targetEntity.IsActive && entity != null && targetEntity.type != entity.type)
-                {
-                    numAttacks++;
-                    Attack(targetEntity);
-                }
-            }
-
             Weapon activeWeapon = GetActiveWeapon();
-            if (numAttacks > 0 && activeWeapon != null && closestEnemy != null)
+            if (activeWeapon != null && closestEnemy != null)
             {
                 StartCoroutine(activeWeapon.Attack(closestEnemy));
             }
@@ -239,7 +217,7 @@ namespace Germinator
             canAttack = true;
         }
 
-        private void Attack(Entity targetEntity)
+        public void Attack(Entity targetEntity)
         {
             if (targetEntity == null || entity?.data.attack == null)
                 return;
