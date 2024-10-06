@@ -67,7 +67,6 @@ namespace Germinator
         public void SetAttackSpeed(float attackSpeed) => entity.data.attack.speed = attackSpeed;
         public void SetAttackDamage(float attackDamage) => entity.data.attack.damage = attackDamage;
         public void SetAttackRange(float attackRange) => entity.data.attack.range = attackRange;
-        public void SetAttackCooldown(float attackCooldown) => entity.data.attack.cooldown = attackCooldown;
 
         public void Clear() => entity.data = defaultValues;
 
