@@ -31,7 +31,7 @@ namespace Germinator
             public float speed;
             public float damage;
             public float range;
-            public float cooldown;
+            public float baseCooldown;
         }
 
         [Serializable]

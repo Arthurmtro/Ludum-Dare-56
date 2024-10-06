@@ -5,14 +5,9 @@ namespace Germinator
 {
     public class PlayerAnimationController : MonoBehaviour
     {
-        [Header("Sprite manager")]
-        public EntitySpriteManager spriteManager;
-
         [Header("Eyes animation")]
         [SerializeField]
         private float eyesMaxMoveRange = 0.3f;
-
-        private PlayerController playerController;
 
         [SerializeField]
         private float eyesMoveSpeed = 2f;
@@ -34,22 +29,38 @@ namespace Germinator
         private Vector3 initialEyesPosition;
         private Vector3 initialBodyPosition;
         public Vector3 targetPosition;
-        private Vector3 mousePositionInWorld;
+
+        private Transform bodyParts;
+        private Transform eyes;
+        private Transform body;
+        private Transform leftLeg;
+        private Transform rightLeg;
 
         public int bodyDirection = 1;
+
+        private PlayerController playerController;
 
         void Start()
         {
             playerController = GetComponent<PlayerController>();
-            initialEyesPosition = spriteManager.GetBodyPart(BodyPart.Eyes).transform.localPosition;
-            initialBodyPosition = spriteManager.GetBodyPart(BodyPart.Body).transform.localPosition;
+
+            bodyParts = transform.Find("BodyParts");
+            eyes = bodyParts.Find("Eyes");
+            body = bodyParts.Find("Body");
+            leftLeg = bodyParts.Find("LeftLeg");
+            rightLeg = bodyParts.Find("RightLeg");
+
+            // Capture initial positions of the eyes and body
+            initialEyesPosition = eyes.localPosition;
+            initialBodyPosition = body.localPosition;
         }
 
         void Update()
         {
-            mousePositionInWorld = targetPosition;
-            mousePositionInWorld.z = 0f;
+            // Ensure z-axis is always 0 to avoid depth changes
+            targetPosition.z = 0f;
 
+            // Execute the animations
             BodyTracking();
             EyesTracking();
             BodyBobbing();
@@ -59,30 +70,33 @@ namespace Germinator
         private void BodyTracking()
         {
             Vector3 characterPosition = transform.position;
-            Vector3 directionToMouse = mousePositionInWorld - characterPosition;
+            Vector3 diff = targetPosition - characterPosition;
 
-            if (directionToMouse.x < 0)
+            // Flip the body parts based on the direction of movement
+            if (diff.x < 0)
             {
-                spriteManager.bodyParts.transform.localScale = new Vector3(1f, 1f, 1);
+                bodyParts.localScale = new Vector3(1f, 1f, 1f);
                 bodyDirection = 1;
             }
             else
             {
-                spriteManager.bodyParts.transform.localScale = new Vector3(-1f, 1f, 1);
+                bodyParts.localScale = new Vector3(-1f, 1f, 1f);
                 bodyDirection = -1;
             }
         }
 
         private void EyesTracking()
         {
-            Vector3 eyesPosition = spriteManager.GetBodyPart(BodyPart.Eyes).transform.localPosition;
-            Vector3 directionToMouse = (
-                mousePositionInWorld - spriteManager.GetBodyPart(BodyPart.Body).transform.position
-            ).normalized;
-            directionToMouse.x *= bodyDirection;
+            Vector3 eyesPosition = eyes.localPosition;
+            Vector3 directionToTarget = (targetPosition - body.position).normalized;
 
-            Vector3 eyesTargetPosition = initialEyesPosition + directionToMouse * eyesMaxMoveRange;
-            spriteManager.GetBodyPart(BodyPart.Eyes).transform.localPosition = Vector3.Lerp(
+            // Adjust eyes movement based on body direction
+            directionToTarget.x *= bodyDirection;
+
+            Vector3 eyesTargetPosition = initialEyesPosition + directionToTarget * eyesMaxMoveRange;
+
+            // Lerp the eyes towards the target position
+            eyes.localPosition = Vector3.Lerp(
                 eyesPosition,
                 eyesTargetPosition,
                 eyesMoveSpeed * Time.deltaTime
@@ -91,38 +105,67 @@ namespace Germinator
 
         private void LegsSwinging()
         {
+            // Reset legs if not moving
             if (!playerController.isMoving)
             {
-                spriteManager.GetBodyPart(BodyPart.LeftLeg).transform.localRotation = Quaternion.identity;
-                spriteManager.GetBodyPart(BodyPart.RightLeg).transform.localRotation = Quaternion.identity;
+                leftLeg.localRotation = Quaternion.identity;
+                rightLeg.localRotation = Quaternion.identity;
                 return;
             }
 
+            // Animate leg swing if moving
             float timeFactor = Time.time * legSwingSpeed;
             float swingAngle = Mathf.Sin(timeFactor) * legSwingAngle;
 
-            spriteManager.GetBodyPart(BodyPart.LeftLeg).transform.localRotation = Quaternion.Euler(
-                0,
-                0,
-                swingAngle
-            );
-            spriteManager.GetBodyPart(BodyPart.RightLeg).transform.localRotation = Quaternion.Euler(
-                0,
-                0,
-                -swingAngle
-            );
+            leftLeg.localRotation = Quaternion.Euler(0, 0, swingAngle);
+            rightLeg.localRotation = Quaternion.Euler(0, 0, -swingAngle);
         }
 
         private void BodyBobbing()
         {
+            // Reset body position if not moving
             if (!playerController.isMoving)
             {
-                spriteManager.GetBodyPart(BodyPart.Body).transform.localPosition = initialBodyPosition;
+                body.localPosition = initialBodyPosition;
                 return;
             }
 
+            // Apply bobbing movement while moving
             float bobOffset = Mathf.Sin(Time.time * bodyBobSpeed) * bodyBobAmount;
-            spriteManager.GetBodyPart(BodyPart.Body).transform.localPosition = initialBodyPosition + new Vector3(0, bobOffset, 0);
+            body.localPosition = initialBodyPosition + new Vector3(0, bobOffset, 0);
+        }
+
+        public IEnumerator ChangeBodyColor(Color targetColor, float transitionSpeed)
+        {
+            float t = 0f;
+            while (t < 1f)
+            {
+                t += Time.deltaTime * transitionSpeed;
+                foreach (Transform child in bodyParts.transform)
+                {
+                    SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
+                    if (spriteRenderer != null)
+                    {
+                        spriteRenderer.color = Color.Lerp(spriteRenderer.color, targetColor, t);
+                    }
+                }
+                yield return null;
+            }
+
+            t = 0f;
+            while (t < 1f)
+            {
+                t += Time.deltaTime * transitionSpeed;
+                foreach (Transform child in bodyParts.transform)
+                {
+                    SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
+                    if (spriteRenderer != null)
+                    {
+                        spriteRenderer.color = Color.Lerp(spriteRenderer.color, Color.white, t);
+                    }
+                }
+                yield return null;
+            }
         }
     }
 }

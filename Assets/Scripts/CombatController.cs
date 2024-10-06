@@ -18,8 +18,9 @@ namespace Germinator
         [SerializeField]
         private GameObject weaponCollection;
 
-        private Entity entity;
         private PlayerAnimationController animationController;
+
+        private Entity entity;
         private bool canAttack = true;
         private readonly List<Entity> enemiesInRange = new();
         private Entity closestEnemy = null;
@@ -27,8 +28,6 @@ namespace Germinator
         private void Awake()
         {
             entity = GetComponent<Entity>();
-            animationController = GetComponent<PlayerAnimationController>();
-
             if (entity == null)
             {
                 Debug.LogError("Entity component is missing from the GameObject.");
@@ -36,14 +35,14 @@ namespace Germinator
                 return;
             }
 
+            animationController = GetComponent<PlayerAnimationController>();
             if (animationController == null)
             {
-                Debug.LogError(
-                    "PlayerAnimationController component is missing from the GameObject."
-                );
+                Debug.LogError("PlayerAnimationController component is missing from the GameObject.");
                 enabled = false;
                 return;
             }
+
 
             if (detectionCollider == null)
             {
@@ -89,6 +88,32 @@ namespace Germinator
             {
                 StartCoroutine(HandleAttack());
             }
+
+            // the target is either the closest enemy or just a direction facing the player rigidbody direction
+            if (closestEnemy != null)
+            {
+                animationController.targetPosition = closestEnemy.transform.position;
+                return;
+            }
+
+            if (TryGetComponent(out Rigidbody2D rigidbody2D))
+            {
+                if (rigidbody2D.velocity.x < 0)
+                {
+                    animationController.targetPosition = new Vector3(
+                        transform.position.x - 1,
+                        transform.position.y,
+                        transform.position.z
+                    );
+                    return;
+                }
+                animationController.targetPosition = new Vector3(
+                    transform.position.x + 1,
+                    transform.position.y,
+                    transform.position.z
+                );
+            }
+
         }
 
         private Weapon GetActiveWeapon()
@@ -148,7 +173,7 @@ namespace Germinator
                 return;
 
             Vector3 direction = (enemyCollider.bounds.center - transform.position).normalized;
-            animationController.targetPosition = enemyCollider.bounds.center;
+            // animationController.targetPosition = enemyCollider.bounds.center;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
             Vector2 offset =
@@ -183,6 +208,10 @@ namespace Germinator
             {
                 enemiesInRange.Remove(targetEntity);
             }
+            // if (enemiesInRange.Count == 0)
+            // {
+            //     closestEnemy = null;
+            // }
         }
 
         private void OnTriggerStay2D(Collider2D collider)
@@ -212,8 +241,9 @@ namespace Germinator
             {
                 StartCoroutine(activeWeapon.Attack(closestEnemy));
             }
-
-            yield return new WaitForSeconds(entity != null ? entity.data.attack.speed : 0f);
+            float baseCooldown = entity.data.attack.baseCooldown;
+            float timeToWait = baseCooldown / entity.data.attack.speed;
+            yield return new WaitForSeconds(timeToWait);
             canAttack = true;
         }
 

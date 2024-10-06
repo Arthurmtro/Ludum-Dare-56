@@ -9,8 +9,12 @@ namespace Germinator
         public Rigidbody2D rigidBody;
         private Vector2 movementDirection;
 
+        [HideInInspector]
         public PlayerEntity entity;
-        private EntitySpriteManager spriteManager;
+        [HideInInspector]
+        public bool isMoving = false;
+
+        private PlayerAnimationController animationController;
 
         #region events
 
@@ -22,12 +26,11 @@ namespace Germinator
 
         private Entity.Data defaultValues = new Entity.Data();
 
-        public bool isMoving = false;
 
         void Awake()
         {
             entity = GetComponent<PlayerEntity>();
-            spriteManager = GetComponent<EntitySpriteManager>();
+            animationController = GetComponent<PlayerAnimationController>();
             defaultValues = entity.data;
         }
 
@@ -69,7 +72,6 @@ namespace Germinator
         public void SetAttackSpeed(float attackSpeed) => entity.data.attack.speed = attackSpeed;
         public void SetAttackDamage(float attackDamage) => entity.data.attack.damage = attackDamage;
         public void SetAttackRange(float attackRange) => entity.data.attack.range = attackRange;
-        public void SetAttackCooldown(float attackCooldown) => entity.data.attack.cooldown = attackCooldown;
 
         public void Clear() => entity.data = defaultValues;
 
@@ -77,6 +79,6 @@ namespace Germinator
         public void OnAttackSpeedModifier() => SetAttackSpeed(entity.data.attack.speed / 1.50f);
         public void OnAttackDamageModifier() => SetAttackDamage(entity.data.attack.damage * 1.10f);
 
-        public void ChangeBodyColor(Color targetColor, float transitionSpeed) => StartCoroutine(spriteManager.ChangeBodyColor(targetColor, transitionSpeed));
+        public void ChangeBodyColor(Color targetColor, float transitionSpeed) => StartCoroutine(animationController.ChangeBodyColor(targetColor, transitionSpeed));
     }
 }

@@ -11,13 +11,10 @@ namespace Germinator
 
         protected Entity owner;
 
-        protected PlayerAnimationController playerAnimationController;
-
         protected virtual void Awake()
         {
             audioSource = GetComponent<AudioSource>();
             owner = GetComponentInParent<Entity>();
-            playerAnimationController = GetComponentInParent<PlayerAnimationController>();
         }
 
         public abstract IEnumerator Attack(Entity target);
