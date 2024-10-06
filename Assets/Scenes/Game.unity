@@ -9037,6 +9037,9 @@ MonoBehaviour:
   - Hasta la vista, germen!
   - 'GO GO GO '
   - "C'est carr\xE9 !!"
+  textSpeed: {fileID: 1162223495}
+  textAtkDamage: {fileID: 109692524}
+  textAtkSpeed: {fileID: 259791149}
 --- !u!95 &1609054347
 Animator:
   serializedVersion: 5
@@ -9498,6 +9501,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waveParticles: {fileID: 524129065}
+  deathParticles: {fileID: 0}
 --- !u!4 &1700830577
 Transform:
   m_ObjectHideFlags: 0
