@@ -113,6 +113,7 @@ namespace Germinator
             animator.SetBool("GameUI", false);
             animator.SetInteger("Section", (int)GameSection.Start);
             cameraFollow.SetBaseDistance(1.5f);
+            effectManager.StopDeathParticles();
         }
 
         public void OnWaveFinish()
@@ -174,6 +175,7 @@ namespace Germinator
             animator.SetBool("GameUI", false);
             animator.SetInteger("Section", (int)GameSection.GameOver);
             waveManager.SetActive(false);
+            effectManager.StartDeathParticles();
         }
 
         #endregion

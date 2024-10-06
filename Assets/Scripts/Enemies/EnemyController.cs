@@ -49,10 +49,13 @@ namespace Germinator
         {
 
             var direction = (Vector2)(target.transform.position - transform.position);
-
+            if (direction.magnitude > 1f)
+            {
+                float speed = direction.magnitude > data.attack.range ? randomSpeedMultiplier * data.moveSpeed : randomSpeedMultiplier * data.moveSpeed * 0.5f;
+                rigidBody.MovePosition(rigidBody.position + (speed * Time.deltaTime * direction.normalized));
+            }
             if (direction.magnitude > data.attack.range)
             {
-                rigidBody.MovePosition(rigidBody.position + (randomSpeedMultiplier * data.moveSpeed * Time.deltaTime * direction.normalized));
                 StopAttack();
                 return;
             }
@@ -74,7 +77,7 @@ namespace Germinator
             }
 
             attackCooldown += Time.deltaTime * data.attack.speed;
-            if (attackCooldown > 1.0f)
+            if (attackCooldown > data.attack.cooldown)
             {
                 canAttack = true;
             }
