@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -51,12 +52,32 @@ namespace Germinator
         {
             Duration = duration;
             Steps = steps;
+            numEnemies = 0;
         }
 
         // Duration in seconds of the wave
         public float Duration;
         // Steps of the wave
         public EnemyWaveStep[] Steps;
+
+        private int numEnemies;
+        public int NumEnemies()
+        {
+            if (numEnemies != 0)
+            {
+                return numEnemies;
+            }
+
+            int result = 0;
+            for (int i = 0; i < Steps.Length; i++)
+            {
+                result += Steps[i].Quantity;
+            }
+
+            numEnemies = result;
+
+            return result;
+        }
 
         public readonly EnemyBuilderQuantity[] GetQuantities()
         {

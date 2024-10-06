@@ -62,6 +62,10 @@ namespace Germinator
             {
                 return false;
             }
+            if (!IsActive)
+            {
+                return false;
+            }
 
             data.health -= damage;
 
