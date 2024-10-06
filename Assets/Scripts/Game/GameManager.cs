@@ -25,6 +25,7 @@ namespace Germinator
         public void Start()
         {
             waveManager.onWaveFinish.AddListener(OnWaveFinish);
+            playerController.Clear();
         }
 
         public void OnPlayPress()
@@ -69,6 +70,7 @@ namespace Germinator
             animator.SetBool("GameUI", false);
             animator.SetInteger("Section", (int)GameSection.WaveFinish);
             effectManager.StartWaveParticles();
+            playerController.Clear();
 
         }
 
