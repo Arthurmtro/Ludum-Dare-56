@@ -63,9 +63,10 @@ namespace Germinator
         public void OnPlayPress()
         {
             kills = 0;
-            comboLevel = 0;
             score = 0;
+            comboLevel = 0;
             comboRemaining = comboDuration;
+            gameUI.UpdateScore(kills, score);
 
             animator.SetInteger("Section", (int)GameSection.Game);
             animator.SetBool("GameUI", true);
@@ -147,7 +148,7 @@ namespace Germinator
                 ComboLevelUp();
             }
 
-            Debug.Log($"{kills} kills - {score}");
+            gameUI.UpdateScore(kills, score);
         }
 
         public void OnPlayerHit()
@@ -173,6 +174,7 @@ namespace Germinator
             comboRemaining = comboDuration;
             comboKills = 0;
             musicManager.SetLevel(comboLevel - 1);
+            gameUI.UpdateCombo(comboLevel);
         }
 
         private void ComboLevelDown()
@@ -186,6 +188,7 @@ namespace Germinator
 
             comboLevel--;
             musicManager.SetLevel(comboLevel - 1);
+            gameUI.UpdateCombo(comboLevel);
         }
 
         private void OnSelectMod(int position)
