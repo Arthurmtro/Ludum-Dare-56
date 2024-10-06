@@ -43,6 +43,8 @@ public class GameUI : MonoBehaviour
     {
         textKills.text = kills.ToString();
         textScore.text = score.ToString();
+        animator.SetTrigger("Kills");
+        animator.SetTrigger("Score");
     }
 
     public void UpdateCombo(int level)

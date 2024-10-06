@@ -66,7 +66,7 @@ namespace Germinator
             score = 0;
             comboLevel = 0;
             comboRemaining = comboDuration;
-            gameUI.UpdateScore(kills, score);
+            player.Clear();
 
             animator.SetInteger("Section", (int)GameSection.Game);
             animator.SetBool("GameUI", true);
@@ -77,6 +77,8 @@ namespace Germinator
             waveManager.SetActive(true);
             player.entity.IsActive = true;
             gameUI.UpdatePlayer(player.entity);
+            gameUI.UpdateScore(kills, score);
+            gameUI.UpdateCombo(comboLevel);
         }
 
         public void OnPausePress()
@@ -182,7 +184,7 @@ namespace Germinator
         {
             comboRemaining = comboDuration;
             comboKills = 0;
-            if (comboLevel > 0)
+            if (comboLevel <= 0)
             {
                 return;
             }
