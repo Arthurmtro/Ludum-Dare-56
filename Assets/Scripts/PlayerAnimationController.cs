@@ -52,12 +52,12 @@ namespace Germinator
 
             if (directionToMouse.x < 0)
             {
-                spriteManager.bodyParts.transform.localScale = new Vector3(0.15f, 0.15f, 1);
+                spriteManager.bodyParts.transform.localScale = new Vector3(1f, 1f, 1);
                 bodyDirection = 1;
             }
             else
             {
-                spriteManager.bodyParts.transform.localScale = new Vector3(-0.15f, 0.15f, 1);
+                spriteManager.bodyParts.transform.localScale = new Vector3(-1f, 1f, 1);
                 bodyDirection = -1;
             }
         }

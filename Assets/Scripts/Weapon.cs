@@ -26,6 +26,8 @@ namespace Germinator
         {
             if (audioSource != null)
             {
+                // reduce volume
+                audioSource.volume = 0.3f;
                 audioSource.Play();
             }
         }

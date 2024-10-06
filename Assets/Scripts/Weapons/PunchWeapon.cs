@@ -31,6 +31,10 @@ namespace Germinator
 
         private void Update()
         {
+            // sortingOrder
+            leftPunchTransform.GetComponent<SpriteRenderer>().sortingOrder = playerAnimationController.bodyDirection == 1 ? 6 : 2;
+            rightPunchTransform.GetComponent<SpriteRenderer>().sortingOrder = playerAnimationController.bodyDirection == 1 ? 2 : 6;
+
             if (isPunching)
             {
                 Vector3 localScale = transform.localScale;
@@ -54,7 +58,7 @@ namespace Germinator
             Vector3 originalPosition = isLeftPunch ? leftOriginalPosition : rightOriginalPosition;
 
             Vector3 direction = (targetPosition - currentPunchTransform.position).normalized;
-            currentPunchAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            currentPunchAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + ((!isLeftPunch ? 50 : 110) * -playerAnimationController.bodyDirection);
 
             while (Vector3.Distance(currentPunchTransform.position, targetPosition) > 0.1f)
             {
@@ -105,7 +109,7 @@ namespace Germinator
                 yield return null;
             }
 
-            currentPunchTransform.localRotation = Quaternion.identity;
+            currentPunchTransform.localRotation = Quaternion.Euler(0, 0, (!isLeftPunch ? 8.5f : 15) * -playerAnimationController.bodyDirection);
 
             isPunching = false;
             isLeftPunch = !isLeftPunch;
