@@ -157,6 +157,7 @@ namespace Germinator
         public void OnPlayerHit()
         {
             gameUI.UpdatePlayer(player.entity);
+            player.ChangeBodyColor(Color.red, 1f);
         }
 
         public void OnPlayerDie()
