@@ -256,53 +256,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1553487158}
     m_Modifications:
-    - target: {fileID: 220360723198080502, guid: aafce15cdcf1a41e3b53d3119ed5f057, type: 3}
-      propertyPath: isQuiet
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 220360723198080502, guid: aafce15cdcf1a41e3b53d3119ed5f057, type: 3}
-      propertyPath: duration
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 220360723198080502, guid: aafce15cdcf1a41e3b53d3119ed5f057, type: 3}
-      propertyPath: tickDuration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 220360723198080502, guid: aafce15cdcf1a41e3b53d3119ed5f057, type: 3}
-      propertyPath: clips.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 220360723198080502, guid: aafce15cdcf1a41e3b53d3119ed5f057, type: 3}
-      propertyPath: clips.Array.data[0]
-      value: 
-      objectReference: {fileID: 8300000, guid: 283306a2df7dec1489e46865b968b762, type: 3}
-    - target: {fileID: 220360723198080502, guid: aafce15cdcf1a41e3b53d3119ed5f057, type: 3}
-      propertyPath: clips.Array.data[1]
-      value: 
-      objectReference: {fileID: 8300000, guid: ca0b8a7f9409b4fd490dd95fa8107be2, type: 3}
-    - target: {fileID: 220360723198080502, guid: aafce15cdcf1a41e3b53d3119ed5f057, type: 3}
-      propertyPath: clips.Array.data[2]
-      value: 
-      objectReference: {fileID: 8300000, guid: 90f24db34f0e04e258a24258beb9d407, type: 3}
-    - target: {fileID: 220360723198080502, guid: aafce15cdcf1a41e3b53d3119ed5f057, type: 3}
-      propertyPath: clips.Array.data[3]
-      value: 
-      objectReference: {fileID: 8300000, guid: ad0988bdf6fe741a191be18918b01004, type: 3}
-    - target: {fileID: 220360723198080502, guid: aafce15cdcf1a41e3b53d3119ed5f057, type: 3}
-      propertyPath: clips.Array.data[4]
-      value: 
-      objectReference: {fileID: 8300000, guid: c9c165339b32e48c89482391185dc9bb, type: 3}
-    - target: {fileID: 220360723198080502, guid: aafce15cdcf1a41e3b53d3119ed5f057, type: 3}
-      propertyPath: clips.Array.data[5]
-      value: 
-      objectReference: {fileID: 8300000, guid: 6f5c9767ff3b0407bb253fd16cd124b3, type: 3}
     - target: {fileID: 1150214865145327577, guid: aafce15cdcf1a41e3b53d3119ed5f057, type: 3}
       propertyPath: m_Name
       value: MusicManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 1150214865145327577, guid: aafce15cdcf1a41e3b53d3119ed5f057, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9203005378170120634, guid: aafce15cdcf1a41e3b53d3119ed5f057, type: 3}
       propertyPath: m_LocalPosition.x
