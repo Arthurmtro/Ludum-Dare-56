@@ -270,12 +270,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 220360723198080502, guid: aafce15cdcf1a41e3b53d3119ed5f057, type: 3}
       propertyPath: clips.Array.size
-      value: 6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 220360723198080502, guid: aafce15cdcf1a41e3b53d3119ed5f057, type: 3}
       propertyPath: clips.Array.data[0]
       value: 
-      objectReference: {fileID: 8300000, guid: eca8b67463a5e408eb46a123d4e8b3d9, type: 3}
+      objectReference: {fileID: 8300000, guid: 283306a2df7dec1489e46865b968b762, type: 3}
     - target: {fileID: 220360723198080502, guid: aafce15cdcf1a41e3b53d3119ed5f057, type: 3}
       propertyPath: clips.Array.data[1]
       value: 
