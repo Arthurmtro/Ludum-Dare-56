@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6522064493243914530}
   - component: {fileID: 5747645086013429298}
   m_Layer: 0
-  m_Name: SpinnerMedium
+  m_Name: SpinnerBig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -129,17 +129,17 @@ MonoBehaviour:
       m_Calls: []
   type: 1
   data:
-    index: 1
-    maxHealth: 10
-    health: 10
+    index: 2
+    maxHealth: 30
+    health: 30
     moveSpeed: 3
     invincibilityTime: 0
     attack:
-      speed: 2
-      damage: 5
-      range: 1.5
-      baseCooldown: 2
-  key: 1
+      speed: 1
+      damage: 10
+      range: 1
+      baseCooldown: 3
+  key: 2
 --- !u!95 &5747645086013429298
 Animator:
   serializedVersion: 5
@@ -188,7 +188,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.052, y: 0.06, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_LocalScale: {x: 0.39805, y: 0.39805, z: 0.39805}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5660389272570817516}
@@ -235,7 +235,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 34fdc23146d3c480d86f8aecb51a1d83, type: 3}
-  m_Color: {r: 1, g: 0.46666667, b: 0, a: 1}
+  m_Color: {r: 1, g: 0, b: 0.879652, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -271,8 +271,8 @@ Transform:
   m_GameObject: {fileID: 7644524178782508048}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 1}
+  m_LocalPosition: {x: -0.030794, y: -0.035532, z: 0}
+  m_LocalScale: {x: 0.39805, y: 0.39805, z: 1.5922}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5660389272570817516}
@@ -319,7 +319,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 4ff913d019351484eafcc993c71cd974, type: 3}
-  m_Color: {r: 1, g: 0.466319, b: 0, a: 1}
+  m_Color: {r: 1, g: 0, b: 0.879652, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

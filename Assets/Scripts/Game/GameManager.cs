@@ -124,7 +124,7 @@ namespace Germinator
             waveManager.SetActive(false);
             player.entity.IsActive = false;
 
-            int newHp = (int)Math.Round(Math.Min(player.entity.data.maxHealth, player.entity.data.health + player.entity.data.maxHealth * 0.1f));
+            int newHp = (int)Math.Round(Math.Min(player.entity.data.maxHealth, player.entity.data.health + player.entity.data.maxHealth * 0.3f));
             player.entity.data.health = newHp;
             gameUI.UpdatePlayer(player.entity);
         }
@@ -152,7 +152,7 @@ namespace Germinator
             comboKills++;
             score += 10 * comboLevel;
 
-            if (comboKills >= 10 * comboLevel)
+            if (comboKills >= 7 * comboLevel)
             {
                 ComboLevelUp();
             }

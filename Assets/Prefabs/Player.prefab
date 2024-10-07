@@ -1032,9 +1032,9 @@ MonoBehaviour:
     maxHealth: 50
     health: 50
     moveSpeed: 250
-    invincibilityTime: 1
+    invincibilityTime: 0.5
     attack:
-      speed: 6
+      speed: 4
       damage: 2
       range: 15
       baseCooldown: 2

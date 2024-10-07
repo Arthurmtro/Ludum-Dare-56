@@ -90,9 +90,9 @@ namespace Germinator
 
         public void Clear() => entity.data = defaultValues;
 
-        public void OnSpeedModifier() => SetMoveSpeed(entity.data.moveSpeed * 1.10f);
-        public void OnAttackSpeedModifier() => SetAttackSpeed(entity.data.attack.speed / 1.50f);
-        public void OnAttackDamageModifier() => SetAttackDamage(entity.data.attack.damage * 1.10f);
+        public void OnSpeedModifier() => SetMoveSpeed(entity.data.moveSpeed * 1.1f);
+        public void OnAttackSpeedModifier() => SetAttackSpeed(entity.data.attack.speed * 1.5f);
+        public void OnAttackDamageModifier() => SetAttackDamage(entity.data.attack.damage * 1.1f);
 
         public void ChangeBodyColor(Color targetColor, float transitionSpeed) => StartCoroutine(animationController.ChangeBodyColor(targetColor, transitionSpeed));
 

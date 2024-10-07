@@ -139,10 +139,10 @@ namespace Germinator
                 return waveCollection.AtIndex(waveIndex);
             }
 
-            float multiplier = 1 + 0.5f * (float)random.NextDouble();
+            float multiplier = 1 + 0.1f * waveIndex;
             return EnemyWaveBuilder.Random(
                 duration,
-                (int)Math.Round(steps * multiplier),
+                steps,
                 (int)Math.Round(minEnemies * multiplier),
                 (int)Math.Round(maxEnemies * multiplier),
                 prefabs);

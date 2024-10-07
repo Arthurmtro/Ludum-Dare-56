@@ -17,7 +17,7 @@ public class MusicManager : MonoBehaviour
     private float prevTime;
 
     #region Getters
-    float MaxLevel => isQuiet ? 0.25f : maxVolume;
+    float MaxLevel => isQuiet ? maxVolume / 2 : maxVolume;
     #endregion
 
     #region Setters
