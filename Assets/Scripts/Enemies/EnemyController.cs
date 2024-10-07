@@ -53,7 +53,6 @@ namespace Germinator
 
         public void MoveTowards(Entity target)
         {
-
             var direction = target.transform.position - transform.position;
             if (direction.magnitude > 1f)
             {

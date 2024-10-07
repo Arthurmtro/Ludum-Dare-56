@@ -13,86 +13,86 @@ MonoBehaviour:
   m_Name: EnemyWaves
   m_EditorClassIdentifier: 
   waves:
-  - Duration: 20
+  - Duration: 40
     Steps:
-    - Time: 3
+    - Time: 5
       Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
-      Quantity: 100
-    - Time: 10
+      Quantity: 5
+    - Time: 20
       Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
-      Quantity: 100
-  - Duration: 70
+      Quantity: 7
+  - Duration: 35
     Steps:
-    - Time: 0
+    - Time: 5
       Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
       Quantity: 8
-    - Time: 35
+    - Time: 25
       Prefab: {fileID: 6522064493243914530, guid: 1e31602d1bdc34c0cb81be37a54ee232, type: 3}
       Quantity: 3
-  - Duration: 80
+  - Duration: 45
     Steps:
-    - Time: 0
+    - Time: 5
       Prefab: {fileID: 6522064493243914530, guid: 1e31602d1bdc34c0cb81be37a54ee232, type: 3}
       Quantity: 4
-    - Time: 25
+    - Time: 15
       Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
       Quantity: 10
-    - Time: 55
+    - Time: 30
       Prefab: {fileID: 6522064493243914530, guid: 1e31602d1bdc34c0cb81be37a54ee232, type: 3}
       Quantity: 5
-  - Duration: 90
+  - Duration: 65
     Steps:
-    - Time: 0
+    - Time: 5
       Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
       Quantity: 12
     - Time: 30
       Prefab: {fileID: 6522064493243914530, guid: 1e31602d1bdc34c0cb81be37a54ee232, type: 3}
       Quantity: 6
-    - Time: 60
+    - Time: 45
       Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
       Quantity: 15
-  - Duration: 100
+  - Duration: 80
     Steps:
-    - Time: 0
+    - Time: 5
       Prefab: {fileID: 6522064493243914530, guid: 1e31602d1bdc34c0cb81be37a54ee232, type: 3}
       Quantity: 5
-    - Time: 25
+    - Time: 20
       Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
       Quantity: 18
-    - Time: 50
+    - Time: 40
       Prefab: {fileID: 6522064493243914530, guid: 1e31602d1bdc34c0cb81be37a54ee232, type: 3}
       Quantity: 7
-    - Time: 75
+    - Time: 55
       Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
       Quantity: 20
-  - Duration: 110
+  - Duration: 80
     Steps:
-    - Time: 0
+    - Time: 5
       Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
       Quantity: 20
     - Time: 30
       Prefab: {fileID: 6522064493243914530, guid: 1e31602d1bdc34c0cb81be37a54ee232, type: 3}
       Quantity: 8
-    - Time: 60
+    - Time: 45
       Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
       Quantity: 25
-    - Time: 90
+    - Time: 65
       Prefab: {fileID: 6522064493243914530, guid: 1e31602d1bdc34c0cb81be37a54ee232, type: 3}
       Quantity: 10
-  - Duration: 120
+  - Duration: 110
     Steps:
-    - Time: 0
+    - Time: 5
       Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
       Quantity: 10
-    - Time: 24
+    - Time: 20
       Prefab: {fileID: 6522064493243914530, guid: 1e31602d1bdc34c0cb81be37a54ee232, type: 3}
       Quantity: 25
-    - Time: 48
+    - Time: 45
       Prefab: {fileID: 6522064493243914530, guid: dfec1898b60e84813bd895e4434ec972, type: 3}
       Quantity: 12
-    - Time: 72
+    - Time: 60
       Prefab: {fileID: 6522064493243914530, guid: 1e31602d1bdc34c0cb81be37a54ee232, type: 3}
       Quantity: 30
-    - Time: 96
+    - Time: 90
       Prefab: {fileID: 6522064493243914530, guid: 1e31602d1bdc34c0cb81be37a54ee232, type: 3}
       Quantity: 15

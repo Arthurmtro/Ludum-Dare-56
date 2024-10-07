@@ -43,7 +43,7 @@ namespace Germinator
 
         private readonly System.Random random = new();
         private int waveIndex = 0;
-        private EnemyWave currentWave;
+        public EnemyWave currentWave;
         private float remainingTime = 0;
         private int tick = 0;
         private int nextStepCandidate = 0;

@@ -31,36 +31,14 @@ namespace Germinator
 
         public void InitEnemySpecies(EnemyController prefab, int quantity)
         {
-            // var enemyInfo = enemyCollection.ByType(builder);
-            // int index = enemyCollection.GetIndex(builder);
             int index = prefab.data.index;
             ClearEnemyBuilder(index);
             enemies[index] = new EnemyController[quantity];
             for (int i = 0; i < quantity; i++)
             {
-                // GameObject enemy = new();
-                // enemyController.builder = builder;
-                // enemy.transform.parent = transform;
-                // Debug.Log($"Spawning enemy {enemy.name}");
-                // builder.behaviour.OnSpawn(enemy);
                 GameObject enemy = Instantiate(prefab.gameObject, transform);
                 EnemyController enemyController = enemy.GetComponent<EnemyController>();
-                // EnemySpecie enemySpecie = enemy.GetComponent<EnemySpecie>();
-                // enemySpecie.builder = builder;
 
-                // EnemyController enemyController = enemy.AddComponent<EnemyController>();
-                // enemyController.builder = builder;
-                // enemyController.specie = enemySpecie;
-
-                // CircleCollider2D circleCollider2D = enemy.AddComponent<CircleCollider2D>();
-                // circleCollider2D.radius = 0.5f;
-                // circleCollider2D.offset = new Vector2(-0.28f, -0.29f);
-                // circleCollider2D.isTrigger = true;
-
-                // EnemyEntity enemyEntity = enemy.AddComponent<EnemyEntity>();
-                // enemyEntity.data = enemyController.prefab.data;
-
-                // enemySpecie.OnSpawn(enemy);
 
                 enemy.name = $"{prefab.name} [{i}]";
                 enemies[index][i] = enemyController;
@@ -93,13 +71,14 @@ namespace Germinator
             int attempts = 0;
             var enemies = this.enemies[prefab.data.index];
             Vector3 position = player.transform.position + (Vector3)GetRandomPosition(4);
+            float dispersion = 10f;
             while (remaining > 0 && attempts < enemies.Length)
             {
                 index %= enemies.Length;
                 var enemy = enemies[index];
                 if (!enemy.IsActive)
                 {
-                    enemy.transform.position = position + new Vector3((float)random.NextDouble() * 3f, (float)random.NextDouble() * 3f, 0f);
+                    enemy.transform.position = position + new Vector3((float)random.NextDouble() * dispersion, (float)random.NextDouble() * dispersion, 0f);
                     remaining--;
                     enemy.IsActive = true;
                     enemy.Appear();
@@ -139,7 +118,7 @@ namespace Germinator
 
         private Vector2 GetRandomPosition(float distance)
         {
-            float angle = (float)(random.NextDouble() * 5.0 * Math.PI);
+            float angle = (float)(random.NextDouble() * 2.0 * Math.PI);
 
             return new Vector2(Mathf.Cos(angle) * distance, Mathf.Sin(angle) * distance);
         }
