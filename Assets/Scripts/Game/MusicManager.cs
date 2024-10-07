@@ -10,7 +10,7 @@ public class MusicManager : MonoBehaviour
     [SerializeField] private float duration;
     [SerializeField] private float tickDuration;
     [SerializeField] private bool isQuiet = false;
-    [SerializeField] private float maxVolume = 0.5f;
+    [SerializeField] private float maxVolume = 0.3f;
 
     private AudioSource[] sources = Array.Empty<AudioSource>();
     private float[] targetVolumes = Array.Empty<float>();

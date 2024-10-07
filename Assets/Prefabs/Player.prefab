@@ -993,6 +993,9 @@ MonoBehaviour:
   rigidBody: {fileID: 8049311024361384035}
   entity: {fileID: 0}
   isMoving: 0
+  soundsClip:
+    hurt: {fileID: 8300000, guid: d2f180716763b334593898f3d6e21478, type: 3}
+  audioSource: {fileID: 7434799727769372782}
 --- !u!114 &7261121396300375600
 MonoBehaviour:
   m_ObjectHideFlags: 0
