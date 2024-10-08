@@ -392,7 +392,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 220360723198080502, guid: aafce15cdcf1a41e3b53d3119ed5f057, type: 3}
       propertyPath: maxVolume
-      value: 0.5
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 1150214865145327577, guid: aafce15cdcf1a41e3b53d3119ed5f057, type: 3}
       propertyPath: m_Name
@@ -5454,7 +5454,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Damages
+  m_text: Damage
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8fa75011f0c8541d18692016732ddae4, type: 2}
   m_sharedMaterial: {fileID: 6987220952937447797, guid: 8fa75011f0c8541d18692016732ddae4, type: 2}
@@ -11046,6 +11046,10 @@ PrefabInstance:
     - target: {fileID: 4684367763499544211, guid: 0ce5b1c153ccc4fb9aa30fb0a19af151, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4728027067753588837, guid: 0ce5b1c153ccc4fb9aa30fb0a19af151, type: 3}
+      propertyPath: comboLevelTexts.Array.data[6]
+      value: HAHAHAHAHAHA
       objectReference: {fileID: 0}
     - target: {fileID: 5124996382471814777, guid: 0ce5b1c153ccc4fb9aa30fb0a19af151, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
